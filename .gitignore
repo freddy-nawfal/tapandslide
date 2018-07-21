@@ -5,3 +5,4 @@ plugins
 .bithoundrc
 CONTRIBUTING.md
 package-lock.json
+package.json
