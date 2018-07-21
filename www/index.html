@@ -5,10 +5,46 @@
         <meta charset="utf-8">
         <script src="js/phaser.min.js"></script>
         <link rel="stylesheet" href="css/main.css" type="text/css">
+        <link rel="stylesheet" href="css/animations.css" type="text/css">
     </head>
  
-    <body>
-        <script src="js/game.js"></script>
+    <body ng-app="main">
+    	<div ng-controller="mainController">
+		  <div class="slide-animate-container">
+		    <div class="slide-animate" ng-include="template.url"></div>
+		  </div>
+		</div>
+
+
+		<script src="cordova.js"></script>
+		<script type="text/javascript" src="js/utilities.js"></script>
+		<script src="js/game.js"></script>
+    	<script type="text/javascript" src="js/angular.min.js"></script>
+    	<script type="text/javascript" src="js/angular-route.min.js"></script>
+    	<script src="js/angular-animate.min.js"></script>
+    	<script type="text/javascript" src="js/navigation.js"></script>
+    	<script type="text/javascript">
+    		
+    		document.addEventListener('deviceready', Startup, false);
+
+
+
+    		function Startup(){
+				console.log("startup");
+				var my_media = new Media('/samples/cr.mp3',
+                    // success callback
+                     function () { console.log("ok"); },
+                    // error callback
+                     function (err) { console.log(err); }
+                );
+                my_media.setVolume(0.1);
+
+                my_media.play();
+    		}
+
+    	</script>
+
+        
     </body>
  
 </html>
