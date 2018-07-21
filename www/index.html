@@ -28,18 +28,12 @@
     		
     		document.addEventListener('deviceready', Startup, false);
 
-
-    		var levelElements = [];
-    		var levelReady = false;
-
     		function Startup(){
-
 				// INIT SOCKET
 				var socket = io.connect('http://localhost:8000');
 
 				socket.on('level', function(data){
-					levelElements = data;
-					levelReady = true;
+					getLevel(data);
 				});
 
     		}

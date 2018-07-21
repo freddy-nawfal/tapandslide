@@ -91,18 +91,18 @@ function generateSpiral(){
     return NewObj;
 }
 
-function generateNewObject(){ //Fonction qui génère un nouvelle objet aléatoire - Pour le multi on lui passera un tableau en param, puis on genere l'objet en fonction de ca 
-  var newType = Math.floor(game.rnd.realInRange(1, 4));
+function generateNewObject(type,id){ //Fonction qui génère un nouvelle objet aléatoire - Pour le multi on lui passera un tableau en param, puis on genere l'objet en fonction de ca 
   var NewObject;
-  if(newType == TypeObject.BUTTON){//BOUTON
+  if(type == TypeObject.BUTTON){//BOUTON
     NewObject = generateButton();
   }
-  else if(newType == TypeObject.SLIDER){//SLIDER
+  else if(type == TypeObject.SLIDER){//SLIDER
     NewObject = generateSlider();
   }
-  else if(newType == TypeObject.SPIRAL){//SPIRAL
+  else if(type == TypeObject.SPIRAL){//SPIRAL
     NewObject = generateSpiral();
   }
+  NewObject.id = id;
   return NewObject;
 }
 

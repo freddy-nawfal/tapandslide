@@ -7,7 +7,7 @@ var Classes = require("./classes.js");
 
 
 io.on('connection', function(socket){
-  var level = new Classes.level(5);
+  var level = new Classes.level(20);
 
   socket.emit('level', level.getElements());
 
