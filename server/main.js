@@ -33,8 +33,6 @@ io.on('connection', function(socket){
 });
 
 
-
-
 var matchMaker = setInterval(function(){
 	Object.keys(waitingRanked).forEach(function(key1) {
 	    Object.keys(waitingRanked).forEach(function(key2) {
@@ -79,7 +77,6 @@ function generateRoom(roomID) {
 
 function generateLevel(roomID){
 	rooms[roomID].level = new Classes.level(50);
-
 
 	io.to(roomID).emit('level', rooms[roomID].level.getElements());
 }

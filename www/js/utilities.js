@@ -44,9 +44,13 @@ function generateSlider(pos){
       minDistanceSlider: 250,
     };
     //object
-    NewObj.Object = game.add.button(getRandomPos(NewObj.objectWidth,window.innerWidth - NewObj.objectWidth),
-                                           getRandomPos(NewObj.objectWidth,window.innerHeight - NewObj.objectWidth),
-                                           'slider', clickSlider, this, 0, 0, 0)
+    var x = (pos.button.x / 100) * window.innerWidth;
+    var y = (pos.button.y / 100) * window.innerHeight;
+    if(x < NewObj.objectWidth)                      x = NewObj.objectWidth;
+    if(x > window.innerWidth-NewObj.objectWidth)    x = window.innerWidth-NewObj.objectWidth;
+    if(y < NewObj.objectWidth)                      y = NewObj.objectWidth;
+    if(y > window.innerHeight-NewObj.objectWidth)   y = window.innerHeight-NewObj.objectWidth;
+    NewObj.Object = game.add.button(x, y, 'slider', clickSlider, this, 0, 0, 0)
     NewObj.Object.input.enableDrag();
     NewObj.Object.setFrames(0, 0, 1);
     NewObj.Object.input.pixelPerfectOver = true;

@@ -15,15 +15,13 @@ module.exports = {
 		constructor(levelLength){
 			this.tab = [];
 
-
 			for(var i=0; i<levelLength; i++){
 				this.tab.push([randomstring.generate(7), this.generateElement()]);
 			}
 		}
 
 		generateElement(){
-			//var type = Math.floor(Math.random()*nbElements) + 1;
-			var type = 1;
+			var type = Math.floor(Math.random()*nbElements) + 1;
 			var pos = {
 				button: {
 					x: 0,
