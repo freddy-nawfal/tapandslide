@@ -45,7 +45,6 @@ function update() {
 function getLevel(data){
   Level.levelElements = data;
   Level.ready = true;
-  console.log(Level.levelElements.length);
 }
 
 function updateLevel(){
