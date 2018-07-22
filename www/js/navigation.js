@@ -9,20 +9,12 @@ app.controller('mainController', ['$scope', function($scope) {
 
 
     $scope.play = function(){
-    	console.log("clicked");
     	$scope.template = $scope.templates[1];
     	launch();
     }
+
+    $scope.menu = function(){
+      console.log("wsh");
+      $scope.template = $scope.templates[0];
+    }
 }]);
-
-
-/*(function(angular) {
-  'use strict';
-angular.module('main', ['ngRoute', 'ngAnimate'])
-  .controller('mainController', ['$scope', function($scope) {
-    $scope.templates =
-      [{ name: 'mainMenu', url: 'mainMenu.html'},
-       { name: 'game.html', url: 'game.html'}];
-    $scope.template = $scope.templates[0];
-  }]);
-})(window.angular);*/

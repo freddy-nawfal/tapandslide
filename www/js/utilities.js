@@ -8,7 +8,7 @@ var Side = {
   LEFT: 2,
 };
 
-function generateButton(){
+function generateButton(pos){
   var NewObj = {
       Type: TypeObject.BUTTON,
       Object: null,
@@ -16,16 +16,22 @@ function generateButton(){
       isClicked: false,
       objectWidth: game.cache.getFrameByIndex('button',1).width/2,
     };
-    NewObj.Object = game.add.button(getRandomPos(NewObj.objectWidth,window.innerWidth - NewObj.objectWidth),
-                                           getRandomPos(NewObj.objectWidth,window.innerHeight - NewObj.objectWidth),
-                                           'button', clickButton, this, 0, 0, 0);
+    var x = (pos.button.x / 100) * window.innerWidth;
+    var y = (pos.button.y / 100) * window.innerHeight;
+    if(x < NewObj.objectWidth)                      x = NewObj.objectWidth;
+    if(x > window.innerWidth-NewObj.objectWidth)    x = window.innerWidth-NewObj.objectWidth;
+    if(y < NewObj.objectWidth)                      y = NewObj.objectWidth;
+    if(y > window.innerHeight-NewObj.objectWidth)   y = window.innerHeight-NewObj.objectWidth;
+
+
+    NewObj.Object = game.add.button(x, y, 'button', clickButton, this, 0, 0, 0);
     NewObj.Object.setFrames(0, 0, 1);
     NewObj.Object.input.pixelPerfectOver = true;
     NewObj.Object.anchor.setTo(0.5, 0.5);
     return NewObj;
 }
 
-function generateSlider(){
+function generateSlider(pos){
   var NewObj = {
       Type: TypeObject.SLIDER,
       Object: null,
@@ -91,13 +97,13 @@ function generateSpiral(){
     return NewObj;
 }
 
-function generateNewObject(type,id){ //Fonction qui génère un nouvelle objet aléatoire - Pour le multi on lui passera un tableau en param, puis on genere l'objet en fonction de ca 
+function generateNewObject(type, pos, id){ //Fonction qui génère un nouvelle objet aléatoire - Pour le multi on lui passera un tableau en param, puis on genere l'objet en fonction de ca 
   var NewObject;
   if(type == TypeObject.BUTTON){//BOUTON
-    NewObject = generateButton();
+    NewObject = generateButton(pos);
   }
   else if(type == TypeObject.SLIDER){//SLIDER
-    NewObject = generateSlider();
+    NewObject = generateSlider(pos);
   }
   else if(type == TypeObject.SPIRAL){//SPIRAL
     NewObject = generateSpiral();

@@ -3,34 +3,34 @@
  
     <head>
         <meta charset="utf-8">
-        <script src="js/phaser.min.js"></script>
+        <script src="js/phaser.js"></script>
         <link rel="stylesheet" href="css/main.css" type="text/css">
-        <link rel="stylesheet" href="css/animations.css" type="text/css">
     </head>
  
     <body ng-app="main">
-    	<div ng-controller="mainController">
-		  <div class="slide-animate-container">
-		    <div class="slide-animate" ng-include="template.url"></div>
-		  </div>
-		</div>
+    	<div id="menu">
+    		MAIN MENU
+
+			<button onclick="play()">play</button>
+    	</div>
+    	<div id="msg"></div>
+		<div id="game"></div>
 
 
+		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/socket.io.js"></script>
 		<script src="cordova.js"></script>
 		<script type="text/javascript" src="js/utilities.js"></script>
 		<script src="js/game.js"></script>
-    	<script type="text/javascript" src="js/angular.min.js"></script>
-    	<script type="text/javascript" src="js/angular-route.min.js"></script>
-    	<script src="js/angular-animate.min.js"></script>
-    	<script type="text/javascript" src="js/navigation.js"></script>
     	<script type="text/javascript">
     		
     		document.addEventListener('deviceready', Startup, false);
 
+    		var socket;
+
     		function Startup(){
 				// INIT SOCKET
-				var socket = io.connect('http://localhost:8000');
+				socket = io.connect('164.132.194.73:8000');
 
 				socket.on('level', function(data){
 					getLevel(data);
@@ -38,10 +38,30 @@
 
 				socket.on("joinedRoom", function(data){
 					console.log(data);
+					$("#msg").html("Game found");
+
+					if(game)game.destroy();
+
+					launch();
+
+					setTimeout(function(){
+						$("#msg").html("");
+						$("#game").slideToggle("slow");
+					}, 1000);
 				});
+				$("#game").hide();
+    		}
 
-				socket.emit("search", "ranked");
+    		function play(){
+    			$("#menu").hide();
 
+    			socket.emit("search", "ranked");
+    			$("#msg").html("Searching for an opponent...");
+    		}
+
+    		function mainMenu(){
+    			$("#menu").show();
+    			$("#game").hide();
     		}
 
     	</script>

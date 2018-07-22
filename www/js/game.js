@@ -1,6 +1,16 @@
 var game;
+
+
 function launch(){
-  game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
+  game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update });
+  
+
+  Level = {
+    levelElements: [],
+    ready: false,
+    elementIndex: 0,
+  };
+
 }
 
 var Level = {
@@ -25,9 +35,10 @@ function create() {
 }
 
 function update() {
-  if(updateLevel()) {
+  if(Level.ready && updateLevel()) {
     Level.ready = false;
-    console.log("terminer");
+    
+    mainMenu();
   }
 }
 
@@ -40,7 +51,7 @@ function getLevel(data){
 function updateLevel(){
   if(Level.ready && Level.elementIndex < Level.levelElements.length){
     if(CurrentCompleted) {
-      CurrentObject = generateNewObject(Level.levelElements[Level.elementIndex][1],Level.levelElements[Level.elementIndex][0]); // pour l'instant on genere en continue tant qu'on fait pas de fonction server qui renvoi un tableau de tous les types un a un
+      CurrentObject = generateNewObject(Level.levelElements[Level.elementIndex][1].type, Level.levelElements[Level.elementIndex][1].pos, Level.levelElements[Level.elementIndex][0]); // pour l'instant on genere en continue tant qu'on fait pas de fonction server qui renvoi un tableau de tous les types un a un
       CurrentCompleted = false;
     }
     else {

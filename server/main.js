@@ -20,14 +20,22 @@ io.on('connection', function(socket){
   	}
   });
 
+
+  socket.on('disconnect', function(){
+  	delete waitingRanked[socket.id];
+
+
+  	// Si user dans room:
+  	//	User 2 gagne -> notifier et renvoyer à l'accueil
+  	//	Supprimer la room
+  });
+
 });
 
 
 
 
 var matchMaker = setInterval(function(){
-	console.log("MATCHMAKING");
-
 	Object.keys(waitingRanked).forEach(function(key1) {
 	    Object.keys(waitingRanked).forEach(function(key2) {
 		    if(key1 != key2){
@@ -35,15 +43,17 @@ var matchMaker = setInterval(function(){
 		    	var client1 = waitingRanked[key1];
 		    	var client2 = waitingRanked[key2];
 
-		    	delete waitingRanked[key1];
-		    	delete waitingRanked[key2];
+		    	if(client1 && client2){
+		    		delete waitingRanked[key1];
+			    	delete waitingRanked[key2];
 
-		    	var roomID = randomstring.generate(7);
-		    	rooms[roomID] = {
-		    		clients: [client1, client2], 
-		    		level: null
-		    	};
-		    	generateRoom(roomID);
+			    	var roomID = randomstring.generate(7);
+			    	rooms[roomID] = {
+			    		clients: [client1, client2], 
+			    		level: null
+			    	};
+			    	generateRoom(roomID);
+		    	}
 		    }
 		});
 	});
@@ -68,7 +78,7 @@ function generateRoom(roomID) {
 }
 
 function generateLevel(roomID){
-	rooms[roomID].level = new Classes.level(5);
+	rooms[roomID].level = new Classes.level(50);
 
 
 	io.to(roomID).emit('level', rooms[roomID].level.getElements());
