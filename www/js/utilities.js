@@ -90,8 +90,7 @@ function generateSlider(pos){
     NewObj.Fleches.animations.play('flechesAnim',5,true);
     NewObj.Fleches.anchor.setTo(0.5, 0.5);
     NewObj.Fleches.angle = Math.atan2(NewObj.PointSlider.y - NewObj.Object.y, NewObj.PointSlider.x - NewObj.Object.x) * 180 / Math.PI;
-    NewObj.minDistanceFleche = game.cache.getFrameByIndex('fleches',1).width/3 + NewObj.objectWidth/2 + NewObj.pointWidth/2;
-    console.log(NewObj.minDistanceFleche);
+    NewObj.minDistanceFleche = game.cache.getFrameByIndex('fleches',1).width + NewObj.objectWidth/2 + NewObj.pointWidth/2;
     return NewObj;
 }
 
