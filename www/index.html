@@ -36,6 +36,12 @@
 					getLevel(data);
 				});
 
+				socket.on("joinedRoom", function(data){
+					console.log(data);
+				});
+
+				socket.emit("search", "ranked");
+
     		}
 
     	</script>
