@@ -1,23 +1,22 @@
 var game;
 
-
-function launch(){
-  game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update });
-  
-
-  Level = {
-    levelElements: [],
-    ready: false,
-    elementIndex: 0,
-  };
-
-}
-
 var Level = {
+  mode: null;
   levelElements: [],
   ready: false,
   elementIndex: 0,
 };
+
+function launch(mode){
+  game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update });
+  
+  Level = {
+    mode: mode,
+    levelElements: [],
+    ready: false,
+    elementIndex: 0,
+  };
+}
 
 function preload() {
   game.load.spritesheet('button', 'assets/button.png', 100, 100, 2);
@@ -35,9 +34,15 @@ function create() {
 }
 
 function update() {
-  if(Level.ready && updateLevel()) {
+  if(Level.ready && updateLevel(Level.mode)) {
+    //fin de la partie si on rentre ici
+    if(Level.mode == "ranked"){
+      //on envoie au serveur le gagnant etc...
+    }
+    else if(Level.mode == "practice"){
+      //on sauvegarde localement si meilleur resultat
+    }
     Level.ready = false;
-    
     mainMenu();
   }
 }
@@ -47,7 +52,10 @@ function getLevel(data){
   Level.ready = true;
 }
 
-function updateLevel(){
+function updateLevel(mode){
+  if(mode == "ranked") updateRanked();
+  else if(mode == "practice") updatePractice();
+
   if(Level.ready && Level.elementIndex < Level.levelElements.length){
     if(CurrentCompleted) {
       CurrentObject = generateNewObject(Level.levelElements[Level.elementIndex][1].type, Level.levelElements[Level.elementIndex][1].pos, Level.levelElements[Level.elementIndex][0]); // pour l'instant on genere en continue tant qu'on fait pas de fonction server qui renvoi un tableau de tous les types un a un
@@ -64,4 +72,13 @@ function updateLevel(){
   }
   else if(Level.elementIndex >= Level.levelElements.length) return true;
   return false;
+}
+
+function updateRanked(){
+  //ici on gere l'update de la ranked
+  //envoie vers serveur pour la barre de progression
+}
+
+function updatePractice(){
+  //ici barre de progression locale
 }
