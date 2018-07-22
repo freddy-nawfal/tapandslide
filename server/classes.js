@@ -50,6 +50,21 @@ module.exports = {
 			else if(type == TypeObject.SLIDER){//SLIDER
 				pos.slider.start.x = Math.floor(Math.random()*99) + 1;
 			    pos.slider.start.y = Math.floor(Math.random()*99) + 1;
+
+			    var X;
+			    var Y; Math.floor(Math.random()*99) + 1;
+			    var minDistancePercent = 40;
+
+			    while(getDistance(X=Math.floor(Math.random()*99) + 1, Y=Math.floor(Math.random()*99) + 1, pos.slider.start.x, pos.slider.start.y) < minDistancePercent) continue;
+
+			    pos.slider.middle.x=X;
+				pos.slider.middle.y=Y;
+
+				X=0;
+				Y=0;
+				while(getDistance(X=Math.floor(Math.random()*99) + 1, Y=Math.floor(Math.random()*99) + 1, pos.middle.start.x, pos.middle.start.y) < minDistancePercent) continue;
+			    pos.slider.end.x=X;
+				pos.slider.end.y=Y;
 			}
 
 			return {type: type, pos: pos};
@@ -59,4 +74,10 @@ module.exports = {
 			return this.tab;
 		}
 	}
+}
+
+function getDistance ( x1, y1, x2, y2 ){ //Distance entre 2 sprite (x1,y1) et (x2,y2)
+  var dx = x1 - x2
+  var dy = y1 - y2
+  return Math.sqrt ( dx * dx + dy * dy )
 }

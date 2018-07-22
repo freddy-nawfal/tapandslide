@@ -38,14 +38,16 @@ function generateSlider(pos){
       Completed: false,
       PointSlider: null,
       SliderMidPoint: false,
+      endPos: null,
       Fleches:null,
       objectWidth: game.cache.getFrameByIndex('slider',1).width/2,
       pointWidth: game.cache.getFrameByIndex('midSlider',1).width/2,
-      minDistanceSlider: 250,
+      minDistanceFleche: null
     };
+
     //object
-    var x = (pos.button.x / 100) * window.innerWidth;
-    var y = (pos.button.y / 100) * window.innerHeight;
+    var x = (pos.slider.start.x / 100) * window.innerWidth;
+    var y = (pos.slider.start.y / 100) * window.innerHeight;
     if(x < NewObj.objectWidth)                      x = NewObj.objectWidth;
     if(x > window.innerWidth-NewObj.objectWidth)    x = window.innerWidth-NewObj.objectWidth;
     if(y < NewObj.objectWidth)                      y = NewObj.objectWidth;
@@ -55,17 +57,34 @@ function generateSlider(pos){
     NewObj.Object.setFrames(0, 0, 1);
     NewObj.Object.input.pixelPerfectOver = true;
     NewObj.Object.anchor.setTo(0.5, 0.5);
+
     //point
-    NewObj.PointSlider = game.add.sprite(getRandomPos(NewObj.pointWidth,window.innerWidth - NewObj.objectWidth),
-                                                getRandomPos(NewObj.pointWidth,window.innerHeight - NewObj.objectWidth),
-                                                'midSlider');
-    while(getDistance(NewObj.Object.x,NewObj.Object.y,
-        NewObj.PointSlider.x = getRandomPos(NewObj.pointWidth,window.innerWidth - NewObj.objectWidth),
-        NewObj.PointSlider.y = getRandomPos(NewObj.pointWidth,window.innerHeight - NewObj.objectWidth)) < NewObj.minDistanceSlider) continue;
+    console.log(pos.slider.middle.x,pos.slider.middle.y,pos.slider.end.x,pos.slider.end.y);
+
+
+    x = (pos.slider.middle.x / 100) * window.innerWidth;
+    y = (pos.slider.middle.y / 100) * window.innerHeight;
+    if(x < NewObj.pointWidth)                      x = NewObj.pointWidth;
+    if(x > window.innerWidth-NewObj.pointWidth)    x = window.innerWidth-NewObj.pointWidth;
+    if(y < NewObj.pointWidth)                      y = NewObj.pointWidth;
+    if(y > window.innerHeight-NewObj.pointWidth)   y = window.innerHeight-NewObj.pointWidth;
+    NewObj.PointSlider = game.add.sprite(x, y, 'midSlider');
     NewObj.PointSlider.anchor.setTo(0.5, 0.5);
     var blink = NewObj.PointSlider.animations.add('blink');
     blink.enableUpdate = true;
     NewObj.PointSlider.animations.play('blink', 15, true);
+
+    x = (pos.slider.end.x / 100) * window.innerWidth;
+    y = (pos.slider.end.y / 100) * window.innerHeight;
+    if(x < NewObj.pointWidth)                      x = NewObj.pointWidth;
+    if(x > window.innerWidth-NewObj.pointWidth)    x = window.innerWidth-NewObj.pointWidth;
+    if(y < NewObj.pointWidth)                      y = NewObj.pointWidth;
+    if(y > window.innerHeight-NewObj.pointWidth)   y = window.innerHeight-NewObj.pointWidth;
+    NewObj.endPos = {
+      endX: x,
+      endY: y
+    };
+
     //fleches
     var flechesPos = getMiddle(NewObj.Object.x,NewObj.Object.y,NewObj.PointSlider.x,NewObj.PointSlider.y);
     NewObj.Fleches = game.add.sprite(flechesPos[0],flechesPos[1],'fleches');
@@ -74,6 +93,8 @@ function generateSlider(pos){
     NewObj.Fleches.animations.play('flechesAnim',5,true);
     NewObj.Fleches.anchor.setTo(0.5, 0.5);
     NewObj.Fleches.angle = Math.atan2(NewObj.PointSlider.y - NewObj.Object.y, NewObj.PointSlider.x - NewObj.Object.x) * 180 / Math.PI;
+    NewObj.minDistanceFleche = game.cache.getFrameByIndex('button',1).width + NewObj.objectWidth/2 + NewObj.pointWidth/2;
+
     return NewObj;
 }
 
@@ -148,7 +169,7 @@ function checkSlider(obj){
   if(obj.Object.y>window.innerHeight-obj.objectWidth) obj.Object.y = window.innerHeight-obj.objectWidth;
 
   //GERE LA FLECHE
-  if(getDistance(obj.Object.x,obj.Object.y,obj.PointSlider.x,obj.PointSlider.y)>obj.minDistanceSlider){
+  if(getDistance(obj.Object.x,obj.Object.y,obj.PointSlider.x,obj.PointSlider.y)>obj.minDistanceFleche){
     obj.Fleches.visible = true;
     var newFlechesPos = getMiddle(obj.Object.x,obj.Object.y,obj.PointSlider.x,obj.PointSlider.y);
     obj.Fleches.x = newFlechesPos[0];
@@ -163,9 +184,8 @@ function checkSlider(obj){
   if(checkOverlap(obj.Object,obj.PointSlider) && checkSliderDistance(obj)){
     if(!obj.SliderMidPoint){ // slider - mid point - changement pos du pointSLider vers end point
       obj.SliderMidPoint = true;
-      while(getDistance(obj.Object.x,obj.Object.y,
-      obj.PointSlider.x = getRandomPos(obj.pointWidth,window.innerWidth - obj.objectWidth),
-      obj.PointSlider.y = getRandomPos(obj.pointWidth,window.innerHeight - obj.objectWidth)) < obj.minDistanceSlider) continue;
+      obj.PointSlider.x = obj.endPos.endX;
+      obj.PointSlider.y = obj.endPos.endY;
     }
     else{ // fin du slider - endpoint
       if(obj.Object.input.isDragged){
@@ -296,10 +316,6 @@ function checkCurrentComplete(obj) { //fonction qui check l'état courant de not
     newObj = checkSpiral(obj);
   }  
   return newObj;
-}
-
-function getRandomPos(min,max) { //Nombre entier random entre min et max inclus
-  return Math.floor(Math.random()*(max-min+1)+min);
 }
 
 function checkOverlap(spriteA, spriteB) { //Verifie l'overlap entre 2 sprite (box2d quoi)
