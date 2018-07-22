@@ -62,7 +62,7 @@ module.exports = {
 
 				X=0;
 				Y=0;
-				while(getDistance(X=Math.floor(Math.random()*99) + 1, Y=Math.floor(Math.random()*99) + 1, pos.middle.start.x, pos.middle.start.y) < minDistancePercent) continue;
+				while(getDistance(X=Math.floor(Math.random()*99) + 1, Y=Math.floor(Math.random()*99) + 1, pos.slider.middle.x, pos.slider.middle.y) < minDistancePercent) continue;
 			    pos.slider.end.x=X;
 				pos.slider.end.y=Y;
 			}
