@@ -22,12 +22,19 @@ io.on('connection', function(socket){
 
 
   socket.on('disconnect', function(){
-  	delete waitingRanked[socket.id];
+
+  	if(socket.roomID){
+  		var toS;
+	  	if(rooms[socket.roomID].clients[0].id != socket.id) toS = rooms[socket.roomID].clients[0].id;
+	  	else toS = rooms[socket.roomID].clients[1].id;
+
+	  	
+	  	io.to(toS).emit('opponentLeft');
 
 
-  	// Si user dans room:
-  	//	User 2 gagne -> notifier et renvoyer à l'accueil
-  	//	Supprimer la room
+	  	delete waitingRanked[socket.id];
+	  	delete rooms[socket.roomID];
+	 }
   });
 
 });
@@ -51,6 +58,9 @@ var matchMaker = setInterval(function(){
 			    		level: null
 			    	};
 			    	generateRoom(roomID);
+
+			    	client1.roomID = roomID;
+			    	client2.roomID = roomID;
 		    	}
 		    }
 		});
@@ -69,8 +79,8 @@ function generateRoom(roomID) {
 	client2.join(roomID);
 
 	generateLevel(roomID);
-	io.to(roomID).emit('joinedRoom', client1.id+" AND "+client2.id);
 
+	io.to(roomID).emit('joinedRoom', client1.id+" AND "+client2.id);
 }
 
 function generateLevel(roomID){
