@@ -33,7 +33,7 @@ module.exports = {
 			  this.tab.push(["practice", this.generateElement(TypeObject.SPIRAL)]);
 			}
 			
-			return shuffleArray(tab);
+			return shuffleArray(this.tab);
 		}
 
 		generateElement(type){
