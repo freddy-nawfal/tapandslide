@@ -32,8 +32,7 @@ module.exports = {
 			for(var i=0; i<nbSpiral; i++){
 			  this.tab.push(["practice", this.generateElement(TypeObject.SPIRAL)]);
 			}
-			
-			return shuffleArray(this.tab);
+			this.tab = shuffleArray(this.tab);
 		}
 
 		generateElement(type){
