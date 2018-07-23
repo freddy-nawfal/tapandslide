@@ -33,6 +33,7 @@ function generateButton(pos){
     NewObj.Object = game.add.button(x, y, 'button', clickButton, this, 0, 0, 0);
     NewObj.Object.setFrames(0, 0, 1);
     NewObj.Object.input.pixelPerfectOver = true;
+    NewObj.Object.input.pixelPerfectClick = true;
     NewObj.Object.anchor.setTo(0.5, 0.5);
     return NewObj;
 }
@@ -62,6 +63,7 @@ function generateSlider(pos){
     NewObj.Object.input.enableDrag();
     NewObj.Object.setFrames(0, 0, 1);
     NewObj.Object.input.pixelPerfectOver = true;
+    NewObj.Object.input.pixelPerfectClick = true;
     NewObj.Object.anchor.setTo(0.5, 0.5);
 
     //point
@@ -119,6 +121,7 @@ function generateSpiral(){
     NewObj.Object.anchor.setTo(0.5,0.5);
     NewObj.Object.inputEnabled=true;
     NewObj.Object.scale.setTo(NewObj.spiralScaleMin);
+    NewObj.Object.input.pixelPerfectClick = true;
     NewObj.Object.events.onInputDown.add(clickSpiral,this);
     NewObj.Object.events.onInputUp.add(releaseSpiral,this);
     return NewObj;
