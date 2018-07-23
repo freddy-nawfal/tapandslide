@@ -69,9 +69,8 @@ function generateRoom(roomID) {
 	client1.join(roomID);
 	client2.join(roomID);
 
-	io.to(roomID).emit('joinedRoom', client1.id+" AND "+client2.id);
-
 	generateLevel(roomID);
+	io.to(roomID).emit('joinedRoom', client1.id+" AND "+client2.id);
 
 }
 

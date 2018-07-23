@@ -1,21 +1,23 @@
 var game;
 
 var Level = {
-  mode: null;
+  mode: null,
   levelElements: [],
   ready: false,
   elementIndex: 0,
 };
 
-function launch(mode){
+function launch(mode,level){
   game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update });
   
   Level = {
     mode: mode,
-    levelElements: [],
-    ready: false,
+    levelElements:level,
+    ready: true,
     elementIndex: 0,
   };
+
+  console.log(Level);
 }
 
 function preload() {
@@ -48,8 +50,7 @@ function update() {
 }
 
 function getLevel(data){
-  Level.levelElements = data;
-  Level.ready = true;
+  return data;
 }
 
 function updateLevel(mode){

@@ -47,18 +47,18 @@
     			socket.emit("search", "ranked");
     			$("#msg").html("Searching for an opponent...");
 
+                var level = [];
+                
                 socket.on('level', function(data){
-                    getLevel(data);
+                    level = getLevel(data);
                 });
 
                 socket.on("joinedRoom", function(data){
-                    console.log(data);
                     $("#msg").html("Game found");
 
                     if(game)game.destroy();
 
-                    launch("ranked");
-
+                    launch("ranked",level);
                     setTimeout(function(){
                         $("#msg").html("");
                         $("#game").slideToggle("slow");
@@ -69,11 +69,12 @@
             function playPractice(){
                 $("#menu").hide();
 
-                getLevel(generatePracticeLevel(50));
+                var level = getLevel(generatePracticeLevel(50));
                 $("#msg").html("Generating practice level...");
+
                 if(game)game.destroy();
 
-                launch("practice");
+                launch("practice",level);
                 setTimeout(function(){
                     $("#msg").html("");
                     $("#game").slideToggle("slow");

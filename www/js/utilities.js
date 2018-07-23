@@ -344,7 +344,7 @@ function getMiddle(x1,y1,x2,y2){ //Milieu de 2 points passer en parametre
 }
 
 function generatePracticeLevel(size){
-  var tab;
+  var tab = [];
   var nbButton = Math.floor(TypeObject.percentage.button * size);
   var nbSlider = Math.floor(TypeObject.percentage.slider * size);
   var nbSpiral = Math.floor(TypeObject.percentage.spiral * size);
@@ -359,7 +359,9 @@ function generatePracticeLevel(size){
   for(var i=0; i<nbSpiral; i++){
     tab.push(["practice", generatePracticeElement(TypeObject.SPIRAL)]);
   }
-  return shuffleArray(tab);
+  tab = shuffleArray(tab);
+  console.log(tab);
+  return tab;
 }
 
 function generatePracticeElement(type){
