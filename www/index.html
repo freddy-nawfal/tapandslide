@@ -20,6 +20,7 @@
 
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/socket.io.js"></script>
+		<script type="text/javascript" src="js/multiplayer/gHandlers.js"></script>
 		<script src="cordova.js"></script>
 		<script type="text/javascript" src="js/utilities.js"></script>
 		<script src="js/game.js"></script>
@@ -43,31 +44,19 @@
 
     		function playRanked(){
     			$("#menu").hide();
-
-    			socket.emit("search", "ranked");
     			$("#msg").html("Searching for an opponent...");
 
-                var level = [];
 
-                socket.on('level', function(data){
-                    level = data;
-                });
+    			gameHandlers.out.search("ranked");
 
-                socket.on("joinedRoom", function(data){
-                    $("#msg").html("Game found");
+                loadGameHandlers();
+    		}
+    		function loadGameHandlers(){
+    			socket.on('level', gameHandlers.in.loadLevel);
 
-                    if(game)game.destroy();
+                socket.on("joinedRoom", gameHandlers.in.joinedRoom);
 
-                    launch("ranked",level);
-                    setTimeout(function(){
-                        $("#msg").html("");
-                        $("#game").slideToggle("slow");
-                    }, 1000);
-                });
-
-                socket.on('opponentLeft', function(){
-                	mainMenu();
-                });
+                socket.on('opponentLeft', gameHandlers.in.opponentLeft);
     		}
 
             function playPractice(){

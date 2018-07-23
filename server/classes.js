@@ -24,13 +24,13 @@ module.exports = {
 			if((nbButton + nbSlider + nbSpiral)<size) nbButton += size - (nbButton + nbSlider + nbSpiral);
 
 			for(var i=0; i<nbButton; i++){
-			  this.tab.push(["practice", this.generateElement(TypeObject.BUTTON)]);
+			  this.tab.push([randomstring.generate(5), this.generateElement(TypeObject.BUTTON)]);
 			}
 			for(var i=0; i<nbSlider; i++){
-			  this.tab.push(["practice", this.generateElement(TypeObject.SLIDER)]);
+			  this.tab.push([randomstring.generate(5), this.generateElement(TypeObject.SLIDER)]);
 			}
 			for(var i=0; i<nbSpiral; i++){
-			  this.tab.push(["practice", this.generateElement(TypeObject.SPIRAL)]);
+			  this.tab.push([randomstring.generate(5), this.generateElement(TypeObject.SPIRAL)]);
 			}
 			this.tab = shuffleArray(this.tab);
 		}
@@ -89,6 +89,10 @@ module.exports = {
 		}
 	}
 }
+
+
+
+// UTILITIES
 
 function getDistance ( x1, y1, x2, y2 ){ //Distance entre 2 sprite (x1,y1) et (x2,y2)
   var dx = x1 - x2

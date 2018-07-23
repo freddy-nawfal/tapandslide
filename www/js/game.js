@@ -48,9 +48,6 @@ function update() {
 }
 
 function updateLevel(mode){
-  if(mode == "ranked") updateRanked();
-  else if(mode == "practice") updatePractice();
-
   if(Level.ready && Level.elementIndex < Level.levelElements.length){
     if(CurrentCompleted) {
       CurrentObject = generateNewObject(Level.levelElements[Level.elementIndex][1].type, Level.levelElements[Level.elementIndex][1].pos, Level.levelElements[Level.elementIndex][0]); // pour l'instant on genere en continue tant qu'on fait pas de fonction server qui renvoi un tableau de tous les types un a un
@@ -59,6 +56,11 @@ function updateLevel(mode){
     else {
       CurrentObject = checkCurrentComplete(CurrentObject);
       if(CurrentObject.Completed==true) {
+        if(mode == "ranked") updateRanked();
+        else if(mode == "practice") updatePractice();
+
+
+
         CurrentObject = null;
         CurrentCompleted = true;
         Level.elementIndex++;
@@ -70,8 +72,9 @@ function updateLevel(mode){
 }
 
 function updateRanked(){
-  //ici on gere l'update de la ranked
-  //envoie vers serveur pour la barre de progression
+  var id = CurrentObject.id;
+
+  gameHandlers.out.elementFinished(id);
 }
 
 function updatePractice(){

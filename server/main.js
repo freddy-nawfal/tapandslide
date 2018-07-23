@@ -25,8 +25,14 @@ io.on('connection', function(socket){
 
   	if(socket.roomID){
   		var toS;
-	  	if(rooms[socket.roomID].clients[0].id != socket.id) toS = rooms[socket.roomID].clients[0].id;
-	  	else toS = rooms[socket.roomID].clients[1].id;
+	  	if(rooms[socket.roomID].clients[0].id != socket.id){ 
+	  		toS = rooms[socket.roomID].clients[0].id;
+	  		rooms[socket.roomID].clients[0].roomID = 0;
+	  	}
+	  	else {
+	  		toS = rooms[socket.roomID].clients[1].id;
+	  		rooms[socket.roomID].clients[1].roomID = 0;
+	  	}
 
 	  	
 	  	io.to(toS).emit('opponentLeft');
@@ -36,6 +42,39 @@ io.on('connection', function(socket){
 	  	delete rooms[socket.roomID];
 	 }
   });
+
+
+  socket.on('elementFinished', function(id){
+  	var roomID = socket.roomID;
+  	var room = rooms[roomID];
+
+  	var client1Tab = room.client1Tab;
+  	var client2Tab = room.client2Tab;
+
+  	if(room.clients[0].id == socket.id){
+  		if(client1Tab[id]){
+  			if(!client1Tab[id].done){
+  				client1Tab[id].done = true;
+  				client1Tab.counter++;
+
+  				console.log("Progression client 1: "+ (client1Tab.counter/room.level.getElements().length)*100 +"%");
+  			}
+  		}
+  	}
+  	else if(room.clients[1].id == socket.id){
+  		if(client2Tab[id]){
+  			if(!client2Tab[id].done){
+  				client2Tab[id].done = true;
+  				client2Tab.counter++;
+  				console.log("Progression client 2: "+ (client2Tab.counter/room.level.getElements().length)*100 +"%");
+  			}
+  		}
+  	}
+
+  	// ici frr t'envoi la progression
+  	// ici frr tu verifie aussi kil a fini esh
+  });
+
 
 });
 
@@ -55,8 +94,11 @@ var matchMaker = setInterval(function(){
 			    	var roomID = randomstring.generate(7);
 			    	rooms[roomID] = {
 			    		clients: [client1, client2], 
-			    		level: null
+			    		level: null,
+			    		client1Tab : {counter: 0},
+			    		client2Tab : {counter: 0}
 			    	};
+
 			    	generateRoom(roomID);
 
 			    	client1.roomID = roomID;
@@ -85,9 +127,15 @@ function generateRoom(roomID) {
 
 function generateLevel(roomID){
 	rooms[roomID].level = new Classes.level(50);
+	var tab = rooms[roomID].level.getElements();
+	for (var i = 0; i < tab.length; i++) {
+		rooms[roomID].client1Tab[tab[i][0]] = {done: false};
+		rooms[roomID].client2Tab[tab[i][0]] = {done: false};
+	}
 
 	io.to(roomID).emit('level', rooms[roomID].level.getElements());
 }
+
 
 
 http.listen(8000, function(){
