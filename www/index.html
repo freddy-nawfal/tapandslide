@@ -48,9 +48,9 @@
     			$("#msg").html("Searching for an opponent...");
 
                 var level = [];
-                
+
                 socket.on('level', function(data){
-                    level = getLevel(data);
+                    level = data;
                 });
 
                 socket.on("joinedRoom", function(data){
@@ -69,7 +69,7 @@
             function playPractice(){
                 $("#menu").hide();
 
-                var level = getLevel(generatePracticeLevel(50));
+                var level = generatePracticeLevel(50);
                 $("#msg").html("Generating practice level...");
 
                 if(game)game.destroy();

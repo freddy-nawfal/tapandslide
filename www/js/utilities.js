@@ -359,9 +359,7 @@ function generatePracticeLevel(size){
   for(var i=0; i<nbSpiral; i++){
     tab.push(["practice", generatePracticeElement(TypeObject.SPIRAL)]);
   }
-  tab = shuffleArray(tab);
-  console.log(tab);
-  return tab;
+  return shuffleArray(tab);
 }
 
 function generatePracticeElement(type){

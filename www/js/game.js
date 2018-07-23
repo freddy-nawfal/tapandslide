@@ -16,8 +16,6 @@ function launch(mode,level){
     ready: true,
     elementIndex: 0,
   };
-
-  console.log(Level);
 }
 
 function preload() {
@@ -47,10 +45,6 @@ function update() {
     Level.ready = false;
     mainMenu();
   }
-}
-
-function getLevel(data){
-  return data;
 }
 
 function updateLevel(mode){

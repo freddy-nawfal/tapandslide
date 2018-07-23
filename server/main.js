@@ -59,7 +59,6 @@ var matchMaker = setInterval(function(){
 }, 2000);
 
 
-
 function generateRoom(roomID) {
 	var client1 = rooms[roomID].clients[0];
 	var client2 = rooms[roomID].clients[1];
@@ -79,8 +78,6 @@ function generateLevel(roomID){
 
 	io.to(roomID).emit('level', rooms[roomID].level.getElements());
 }
-
-
 
 
 http.listen(8000, function(){
