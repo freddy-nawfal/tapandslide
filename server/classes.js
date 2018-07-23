@@ -24,13 +24,13 @@ module.exports = {
 			if((nbButton + nbSlider + nbSpiral)<size) nbButton += size - (nbButton + nbSlider + nbSpiral);
 
 			for(var i=0; i<nbButton; i++){
-			  this.tab.push(["practice", generateElement(TypeObject.BUTTON)]);
+			  this.tab.push(["practice", this.generateElement(TypeObject.BUTTON)]);
 			}
 			for(var i=0; i<nbSlider; i++){
-			  this.tab.push(["practice", generateElement(TypeObject.SLIDER)]);
+			  this.tab.push(["practice", this.generateElement(TypeObject.SLIDER)]);
 			}
 			for(var i=0; i<nbSpiral; i++){
-			  this.tab.push(["practice", generateElement(TypeObject.SPIRAL)]);
+			  this.tab.push(["practice", this.generateElement(TypeObject.SPIRAL)]);
 			}
 			
 			return shuffleArray(tab);
