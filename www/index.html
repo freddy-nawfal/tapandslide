@@ -3,16 +3,20 @@
  
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+
         <script src="js/phaser.js"></script>
         <link rel="stylesheet" href="css/main.css" type="text/css">
     </head>
  
     <body ng-app="main">
     	<div id="menu">
-    		MAIN MENU
 
-			<button onclick="playRanked()">Ranked</button>
-            <button onclick="playPractice()">Practice</button>
+            <div id="buttons">
+                <button onclick="playRanked()">Ranked</button>
+                <button onclick="playPractice()">Practice</button>
+            </div>
+
     	</div>
     	<div id="msg"></div>
 		<div id="game"></div>
@@ -29,12 +33,14 @@
     		document.addEventListener('deviceready', Startup, false);
 
     		var socket;
+            var searching = false;
 
     		function Startup(){
 				// INIT SOCKET
 				socket = io.connect('http://localhost:8000');
 
 				$("#game").hide();
+
     		}
 
             function mainMenu(){
@@ -43,8 +49,9 @@
             }
 
     		function playRanked(){
-    			$("#menu").hide();
+    			//$("#menu").hide();
     			$("#msg").html("Searching for an opponent...");
+                searching = true;
 
 
     			gameHandlers.out.search("ranked");
@@ -69,8 +76,13 @@
 
                 launch("practice",level);
                 setTimeout(function(){
-                    $("#msg").html("");
-                    $("#game").slideToggle("slow");
+                    if(searching){
+                        $("#msg").html("Searching for an opponent...");
+                    }
+                    else{
+                        $("#msg").html("");
+                    }
+                    $("#game").show();
                 }, 1000);
             }
 

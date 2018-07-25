@@ -8,14 +8,17 @@ var Level = {
 };
 
 function launch(mode,level){
-  game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update });
-  
   Level = {
     mode: mode,
     levelElements:level,
     ready: true,
     elementIndex: 0,
   };
+
+
+  game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update });
+  
+  console.log(Level);
 }
 
 function preload() {
@@ -34,16 +37,18 @@ function create() {
 }
 
 function update() {
-  if(Level.ready && updateLevel(Level.mode)) {
-    //fin de la partie si on rentre ici
-    if(Level.mode == "ranked"){
-      //on envoie au serveur le gagnant etc...
+  if(game){
+    if(Level.ready && updateLevel(Level.mode)) {
+      //fin de la partie si on rentre ici
+      if(Level.mode == "ranked"){
+        //on envoie au serveur le gagnant etc...
+      }
+      else if(Level.mode == "practice"){
+        //on sauvegarde localement si meilleur resultat
+      }
+      Level.ready = false;
+      mainMenu();
     }
-    else if(Level.mode == "practice"){
-      //on sauvegarde localement si meilleur resultat
-    }
-    Level.ready = false;
-    mainMenu();
   }
 }
 

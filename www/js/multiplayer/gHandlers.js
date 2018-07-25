@@ -7,19 +7,24 @@ var gameHandlers = {
 		},
 
 		joinedRoom : function(data){
+			searching = false;
 			$("#msg").html("Game found");
+			$("#menu").hide();
 
 	        if(game)game.destroy();
 
 	        launch("ranked", this.level);
+	        
 	        setTimeout(function(){
-	            $("#msg").html("");
-	            $("#game").slideToggle("slow");
+	            $("#msg").hide();
+	            $("#game").show();
 	        }, 1000);
 		},
 
 		opponentLeft : function(){
 			mainMenu();
+			$("#msg").show();
+			$("#msg").html("Your opponent left");
 		}
 	},
 
