@@ -8,23 +8,26 @@ var gameHandlers = {
 
 		joinedRoom : function(data){
 			searching = false;
-			$("#msg").html("Game found");
+			info("Game found, transitioning...");
 			$("#menu").hide();
+
+			$("#searching").hide();
+			$("#ranked").show();
+
 
 	        if(game)game.destroy();
 
 	        launch("ranked", this.level);
 	        
 	        setTimeout(function(){
-	            $("#msg").hide();
+	            hideNotification();
 	            $("#game").show();
 	        }, 1000);
 		},
 
 		opponentLeft : function(){
 			mainMenu();
-			$("#msg").show();
-			$("#msg").html("Your opponent left");
+			info("Your opponent left", 3);
 		},
 
 		progressionInfo : function(data){
@@ -42,12 +45,11 @@ var gameHandlers = {
 		winner : function(data){
 			$("#game").hide();
 			$("#menu").show();
-			$("#msg").show();
 			if(data == myID){
-				$("#msg").html("YOU WON");
+				info("YOU WON", 5);
 			}
 			else{
-				$("#msg").html("YOU LOST");
+				info("YOU LOST", 5);
 			}
 		}
 	},
@@ -59,6 +61,10 @@ var gameHandlers = {
 
 		search : function(mode){
 			socket.emit("search", mode);
+		}, 
+
+		abandonSearch : function(){
+			socket.emit("abandonSearch");
 		}
 	}
 	

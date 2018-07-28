@@ -11,19 +11,21 @@
  
     <body ng-app="main">
     	<div id="menu">
-
+            <img src="assets/logo.png" width="100%">
             <div id="buttons">
-                <button onclick="playRanked()">Ranked</button>
-                <button onclick="playPractice()">Practice</button>
+                <button onclick="$(this).hide(); $('#searching').show(); playRanked();" class="menuBtn" id="ranked">Ranked</button>
+                <button class="menuBtn" style="display: none;" id="searching" onclick="abandonSearch();">Searching <img src="assets/loader.gif" width="16px"></button>
+                <button onclick="playPractice()" class="menuBtn">Practice</button>
             </div>
 
     	</div>
-    	<div id="msg"></div>
+    	<div id="msg" style="display: none"></div>
 		<div id="game"></div>
 
 
 		<script type="text/javascript" src="js/jquery.min.js"></script>
-		<script type="text/javascript" src="js/socket.io.js"></script>
+        <script type="text/javascript" src="js/socket.io.js"></script>
+		<script type="text/javascript" src="js/notify.js"></script>
         <script type="text/javascript" src="js/multiplayer/gHandlers.js"></script>
 		<script type="text/javascript" src="js/multiplayer/eHandlers.js"></script>
 		<script src="cordova.js"></script>
@@ -43,20 +45,17 @@
 
                 $("#game").hide();
                 $("#menu").hide();
-                $("#msg").show();
-                $("#msg").html("Connection to servers...");
+                info("Connecting to servers");
                 loadErrorHandlers();
 
-                waitForConnection(function(){
-                    $("#msg").hide();
-                    $("#menu").show();
-                });
+                waitForConnection();
     		}
 
-            function waitForConnection(after){
+            function waitForConnection(){
                 socket.on('connected', function(data){
                     myID = data;
-                    after();
+                    hideNotification(true);
+                    $("#menu").show();
                 });
             }
 
@@ -66,8 +65,6 @@
             }
 
     		function playRanked(){
-    			//$("#menu").hide();
-    			$("#msg").html("Searching for an opponent...");
                 searching = true;
 
 
@@ -75,15 +72,19 @@
 
                 loadGameHandlers();
     		}
+            function abandonSearch(){
+                info("You left the matchmaking", 2);
+                gameHandlers.out.abandonSearch();
+                $("#searching").hide();
+                $("#ranked").show();
+            }
+
+
     		function loadGameHandlers(){
     			socket.on('level', gameHandlers.in.loadLevel);
-
                 socket.on("joinedRoom", gameHandlers.in.joinedRoom);
-
                 socket.on('opponentLeft', gameHandlers.in.opponentLeft);
-
                 socket.on('progressionInfo', gameHandlers.in.progressionInfo);
-
                 socket.on('winner', gameHandlers.in.winner);
     		}
             function loadErrorHandlers(){
@@ -92,23 +93,24 @@
                 socket.on('reconnect_attempt', errors.reconnect_attempt);
                 socket.on('reconnect_error', errors.reconnect_error);
                 socket.on('reconnect_failed', errors.reconnect_failed);
+                socket.on('reconnect', errors.reconnect);
             }
 
             function playPractice(){
                 $("#menu").hide();
 
                 var level = generatePracticeLevel(50);
-                $("#msg").html("Generating practice level...");
+                info("Generating practice level");
 
                 if(game)game.destroy();
 
                 launch("practice",level);
                 setTimeout(function(){
                     if(searching){
-                        $("#msg").html("Searching for an opponent...");
+                        info("Searching for an opponent...");
                     }
                     else{
-                        $("#msg").html("");
+                        hideNotification();
                     }
                     $("#game").show();
                 }, 1000);

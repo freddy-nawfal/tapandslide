@@ -22,6 +22,10 @@ io.on('connection', function(socket){
   		waitingRanked[socket.id] = socket;
   	}
   });
+  socket.on("abandonSearch", function(){
+  	delete waitingRanked[socket.id];
+  	console.log(socket.id+" left the matchmaking");
+  });
 
 
   socket.on('disconnect', function(){
@@ -40,10 +44,14 @@ io.on('connection', function(socket){
 	  	
 	  	io.to(toS).emit('opponentLeft');
 
-
-	  	delete waitingRanked[socket.id];
 	  	delete rooms[socket.roomID];
 	 }
+
+	if(waitingRanked[socket.id]){
+	  delete waitingRanked[socket.id];
+	  console.log(socket.id+" left the matchmaking");
+	}
+	 
   });
 
 

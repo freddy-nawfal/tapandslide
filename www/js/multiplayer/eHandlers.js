@@ -14,11 +14,14 @@ var errors = {
 	reconnect_failed : function(){
 		errors.printErrorMsg("Reconnection failed");
 	},
+	reconnect : function(){
+		info("Reconnected", 1);
+		$("#menu").show();
+	},
 
 	printErrorMsg : function(msg){
 		$("#game").hide();
         $("#menu").hide();
-        $("#msg").show();
-        $("#msg").html(msg);
+        info(msg);
 	}
 }
