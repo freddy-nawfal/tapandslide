@@ -6,7 +6,8 @@ var Level = {
   ready: false,
   elementIndex: 0,
   myProgression: 0,
-  enemyProgression: 0
+  enemyProgression: 0,
+  CurrentCompleted: true
 };
 
 function launch(mode,level){
@@ -16,7 +17,8 @@ function launch(mode,level){
     ready: true,
     elementIndex: 0,
     myProgression: 0,
-    enemyProgression: 0
+    enemyProgression: 0,
+    CurrentCompleted: true
   };
 
 
@@ -34,7 +36,6 @@ function preload() {
 }
 
 var CurrentObject;
-var CurrentCompleted = true;
 var MyProgression;
 var EnemyProgression;
 
@@ -42,7 +43,7 @@ function create() {
   game.stage.backgroundColor = "#ffffff";
 
   MyProgression = game.add.text(10, 10, "ME: "+Level.myProgression+"%");
-  EnemyProgression = game.add.text(window.innerWidth-100, 10, "ENEMY: "+Level.enemyProgression+"%");
+  EnemyProgression = game.add.text(window.innerWidth-120, 10, "OPPONENT: "+Level.enemyProgression+"%");
   MyProgression.fontSize = 15;
   EnemyProgression.fontSize = 15;
   
@@ -63,15 +64,15 @@ function update() {
     }
 
     MyProgression.setText("ME: "+Level.myProgression+"%");
-    EnemyProgression.setText("ENEMY: "+Level.enemyProgression+"%");
+    EnemyProgression.setText("OPPONENT: "+Level.enemyProgression+"%");
   }
 }
 
 function updateLevel(mode){
   if(Level.ready && Level.elementIndex < Level.levelElements.length){
-    if(CurrentCompleted) {
+    if(Level.CurrentCompleted) {
       CurrentObject = generateNewObject(Level.levelElements[Level.elementIndex][1].type, Level.levelElements[Level.elementIndex][1].pos, Level.levelElements[Level.elementIndex][0]); // pour l'instant on genere en continue tant qu'on fait pas de fonction server qui renvoi un tableau de tous les types un a un
-      CurrentCompleted = false;
+      Level.CurrentCompleted = false;
     }
     else {
       CurrentObject = checkCurrentComplete(CurrentObject);
@@ -82,7 +83,7 @@ function updateLevel(mode){
 
 
         CurrentObject = null;
-        CurrentCompleted = true;
+        Level.CurrentCompleted = true;
         Level.elementIndex++;
       }
     } 

@@ -94,9 +94,9 @@ io.on('connection', function(socket){
   		value: c2Progression
   	}];
 
-  	console.log("C1: "+room.clients[0].id, "C2: "+room.clients[1].id);
-
   	io.to(roomID).emit("progressionInfo", toSend);
+
+
   
   	// ici frr tu verifie aussi kil a fini esh
   	if(c1Progression == 100 || c2Progression == 100){
@@ -166,7 +166,7 @@ function generateRoom(roomID) {
 }
 
 function generateLevel(roomID){
-	rooms[roomID].level = new Classes.level(50);
+	rooms[roomID].level = new Classes.level(1);
 	var tab = rooms[roomID].level.getElements();
 	for (var i = 0; i < tab.length; i++) {
 		rooms[roomID].client1Tab[tab[i][0]] = {done: false};

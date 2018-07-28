@@ -41,7 +41,7 @@
 
     		function Startup(){
 				// INIT SOCKET
-				socket = io.connect('http://192.168.1.24:8000');
+				socket = io.connect('http://diiiazote.tk:8000');
 
                 $("#game").hide();
                 $("#menu").hide();
@@ -49,6 +49,7 @@
                 loadErrorHandlers();
 
                 waitForConnection();
+                loadGameHandlers();
     		}
 
             function waitForConnection(){
@@ -62,6 +63,13 @@
             function mainMenu(){
                 $("#menu").show();
                 $("#game").hide();
+                if(game){
+                    console.log("destroying game");
+                    game.destroy(true, true);
+                    game = null;
+                    $("#game").html("");
+                }
+
             }
 
     		function playRanked(){
@@ -69,8 +77,6 @@
 
 
     			gameHandlers.out.search("ranked");
-
-                loadGameHandlers();
     		}
             function abandonSearch(){
                 info("You left the matchmaking", 2);
@@ -102,7 +108,12 @@
                 var level = generatePracticeLevel(50);
                 info("Generating practice level");
 
-                if(game)game.destroy();
+                if(game){
+                    console.log("destroying game");
+                    game.destroy(true, true);
+                    game = null;
+                    $("#game").html("");
+                }
 
                 launch("practice",level);
                 setTimeout(function(){

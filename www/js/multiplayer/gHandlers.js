@@ -14,8 +14,12 @@ var gameHandlers = {
 			$("#searching").hide();
 			$("#ranked").show();
 
-
-	        if(game)game.destroy();
+			if(game){
+                console.log("destroying game");
+                game.destroy(true, true);
+                game = null;
+                $("#game").html("");
+            }
 
 	        launch("ranked", this.level);
 	        
@@ -31,12 +35,11 @@ var gameHandlers = {
 		},
 
 		progressionInfo : function(data){
-			console.log(data);
-			if(data[0].id = myID){
+			if(data[0].id == myID){
 				Level.myProgression = data[0].value;
 				Level.enemyProgression = data[1].value;
 			}
-			else if(data[1].id = myID){
+			else if(data[1].id == myID){
 				Level.myProgression = data[1].value;
 				Level.enemyProgression = data[0].value;
 			}
