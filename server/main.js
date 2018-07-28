@@ -11,6 +11,9 @@ var rooms = {};
 
 
 io.on('connection', function(socket){
+
+	socket.emit("connected", socket.id);
+
   
   socket.on("search", function(mode){
   	console.log("client: "+socket.id+" searching for "+mode);
@@ -51,13 +54,12 @@ io.on('connection', function(socket){
   	var client1Tab = room.client1Tab;
   	var client2Tab = room.client2Tab;
 
+  	// on inkrément les compteurs frr 
   	if(room.clients[0].id == socket.id){
   		if(client1Tab[id]){
   			if(!client1Tab[id].done){
   				client1Tab[id].done = true;
   				client1Tab.counter++;
-
-  				console.log("Progression client 1: "+ (client1Tab.counter/room.level.getElements().length)*100 +"%");
   			}
   		}
   	}
@@ -66,19 +68,49 @@ io.on('connection', function(socket){
   			if(!client2Tab[id].done){
   				client2Tab[id].done = true;
   				client2Tab.counter++;
-  				console.log("Progression client 2: "+ (client2Tab.counter/room.level.getElements().length)*100 +"%");
   			}
   		}
   	}
 
-  	// ici frr t'envoi la progression
+  	// ici frr tu kalkul et t'envoi la progression
+  	var c1Progression = (client1Tab.counter/room.level.getElements().length)*100;
+  	var c2Progression = (client2Tab.counter/room.level.getElements().length)*100;
+
+  	var toSend = [
+  	{
+  		id: room.clients[0].id, 
+  		value: c1Progression
+  	}, 
+  	{
+  		id: room.clients[1].id, 
+  		value: c2Progression
+  	}];
+
+  	console.log("C1: "+room.clients[0].id, "C2: "+room.clients[1].id);
+
+  	io.to(roomID).emit("progressionInfo", toSend);
+  
   	// ici frr tu verifie aussi kil a fini esh
+  	if(c1Progression == 100 || c2Progression == 100){
+  		if(c1Progression == 100){
+  			io.to(roomID).emit('winner', room.clients[0].id);
+  		}
+  		else{
+  			io.to(roomID).emit('winner', room.clients[1].id);
+  		}
+
+  		room.clients[0].roomID = null;
+  		room.clients[1].roomID = null;
+  		delete rooms[roomID];
+  	}
+
+
   });
 
 
 });
 
-
+// Toutes les 2 secondes on parcours la liste des gens en attente 
 var matchMaker = setInterval(function(){
 	Object.keys(waitingRanked).forEach(function(key1) {
 	    Object.keys(waitingRanked).forEach(function(key2) {

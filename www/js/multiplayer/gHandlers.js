@@ -25,6 +25,30 @@ var gameHandlers = {
 			mainMenu();
 			$("#msg").show();
 			$("#msg").html("Your opponent left");
+		},
+
+		progressionInfo : function(data){
+			console.log(data);
+			if(data[0].id = myID){
+				Level.myProgression = data[0].value;
+				Level.enemyProgression = data[1].value;
+			}
+			else if(data[1].id = myID){
+				Level.myProgression = data[1].value;
+				Level.enemyProgression = data[0].value;
+			}
+		},
+
+		winner : function(data){
+			$("#game").hide();
+			$("#menu").show();
+			$("#msg").show();
+			if(data == myID){
+				$("#msg").html("YOU WON");
+			}
+			else{
+				$("#msg").html("YOU LOST");
+			}
 		}
 	},
 

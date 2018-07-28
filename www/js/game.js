@@ -5,6 +5,8 @@ var Level = {
   levelElements: [],
   ready: false,
   elementIndex: 0,
+  myProgression: 0,
+  enemyProgression: 0
 };
 
 function launch(mode,level){
@@ -13,6 +15,8 @@ function launch(mode,level){
     levelElements:level,
     ready: true,
     elementIndex: 0,
+    myProgression: 0,
+    enemyProgression: 0
   };
 
 
@@ -31,9 +35,17 @@ function preload() {
 
 var CurrentObject;
 var CurrentCompleted = true;
+var MyProgression;
+var EnemyProgression;
 
 function create() {
   game.stage.backgroundColor = "#ffffff";
+
+  MyProgression = game.add.text(10, 10, "ME: "+Level.myProgression+"%");
+  EnemyProgression = game.add.text(window.innerWidth-100, 10, "ENEMY: "+Level.enemyProgression+"%");
+  MyProgression.fontSize = 15;
+  EnemyProgression.fontSize = 15;
+  
 }
 
 function update() {
@@ -49,6 +61,9 @@ function update() {
       Level.ready = false;
       mainMenu();
     }
+
+    MyProgression.setText("ME: "+Level.myProgression+"%");
+    EnemyProgression.setText("ENEMY: "+Level.enemyProgression+"%");
   }
 }
 

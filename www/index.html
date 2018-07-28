@@ -24,7 +24,8 @@
 
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/socket.io.js"></script>
-		<script type="text/javascript" src="js/multiplayer/gHandlers.js"></script>
+        <script type="text/javascript" src="js/multiplayer/gHandlers.js"></script>
+		<script type="text/javascript" src="js/multiplayer/eHandlers.js"></script>
 		<script src="cordova.js"></script>
 		<script type="text/javascript" src="js/utilities.js"></script>
 		<script src="js/game.js"></script>
@@ -34,14 +35,30 @@
 
     		var socket;
             var searching = false;
+            var myID = null;
 
     		function Startup(){
 				// INIT SOCKET
-				socket = io.connect('http://localhost:8000');
+				socket = io.connect('http://192.168.1.24:8000');
 
-				$("#game").hide();
+                $("#game").hide();
+                $("#menu").hide();
+                $("#msg").show();
+                $("#msg").html("Connection to servers...");
+                loadErrorHandlers();
 
+                waitForConnection(function(){
+                    $("#msg").hide();
+                    $("#menu").show();
+                });
     		}
+
+            function waitForConnection(after){
+                socket.on('connected', function(data){
+                    myID = data;
+                    after();
+                });
+            }
 
             function mainMenu(){
                 $("#menu").show();
@@ -64,7 +81,18 @@
                 socket.on("joinedRoom", gameHandlers.in.joinedRoom);
 
                 socket.on('opponentLeft', gameHandlers.in.opponentLeft);
+
+                socket.on('progressionInfo', gameHandlers.in.progressionInfo);
+
+                socket.on('winner', gameHandlers.in.winner);
     		}
+            function loadErrorHandlers(){
+                socket.on('connect_error', errors.connect_error);
+                socket.on('connect_timeout', errors.connect_timeout);
+                socket.on('reconnect_attempt', errors.reconnect_attempt);
+                socket.on('reconnect_error', errors.reconnect_error);
+                socket.on('reconnect_failed', errors.reconnect_failed);
+            }
 
             function playPractice(){
                 $("#menu").hide();
