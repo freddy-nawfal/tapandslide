@@ -114,10 +114,12 @@ io.on('connection', function(socket){
   	// ici frr tu verifie aussi kil a fini wesh
   	if(c1Progression == 100 || c2Progression == 100){
   		if(c1Progression == 100){
-  			io.to(roomID).emit('winner', room.clients[0].id);
+  			io.to(room.clients[0].id).emit('winner');
+  			io.to(room.clients[1].id).emit('loser');
   		}
   		else{
-  			io.to(roomID).emit('winner', room.clients[1].id);
+  			io.to(room.clients[1].id).emit('winner');
+  			io.to(room.clients[0].id).emit('loser');
   		}
 
   		room.clients[0].roomID = null;

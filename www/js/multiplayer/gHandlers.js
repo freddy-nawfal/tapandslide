@@ -21,9 +21,6 @@ var gameHandlers = {
 		},
 
 		gameStart : function(){
-			$(ready).css('background','rgba(204, 88, 88, 0.35)');
-			$("readyMenu").hide();
-
 			if(game){
                 console.log("destroying game");
                 game.destroy(true, true);
@@ -35,6 +32,8 @@ var gameHandlers = {
 	        
 	        setTimeout(function(){
 	            $("#game").show();
+	            $("readyMenu").hide();
+				$(ready).css('background','rgba(204, 88, 88, 0.35)');
 	        }, 1000);
 		},
 
@@ -54,16 +53,14 @@ var gameHandlers = {
 			}
 		},
 
-		winner : function(data){
-			$("#game").hide();
-			$("#menu").show();
-			$("#readyMenu").hide();
-			if(data == myID){
-				info("YOU WON", 5);
-			}
-			else{
-				info("YOU LOST", 5);
-			}
+		winner : function(){
+			info("YOU WON", 5);
+			mainMenu();
+		},
+
+		loser : function(){
+			info("YOU LOST", 5);
+			mainMenu();
 		}
 	},
 

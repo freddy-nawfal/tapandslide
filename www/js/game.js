@@ -6,7 +6,8 @@ var Level = {
   ready: false,
   elementIndex: 0,
   myProgression: 0,
-  enemyProgression: 0
+  enemyProgression: 0,
+  currentCompleted: true
 };
 
 function launch(mode,level){
@@ -16,7 +17,8 @@ function launch(mode,level){
     ready: true,
     elementIndex: 0,
     myProgression: 0,
-    enemyProgression: 0
+    enemyProgression: 0,
+    currentCompleted: true
   };
 
   game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update });
@@ -33,7 +35,6 @@ function preload() {
 }
 
 var CurrentObject;
-var CurrentCompleted = true;
 var MyProgression;
 var EnemyProgression;
 
@@ -68,9 +69,9 @@ function update() {
 
 function updateLevel(mode){
   if(Level.ready && Level.elementIndex < Level.levelElements.length){
-    if(CurrentCompleted) {
+    if(Level.currentCompleted) {
       CurrentObject = generateNewObject(Level.levelElements[Level.elementIndex][1].type, Level.levelElements[Level.elementIndex][1].pos, Level.levelElements[Level.elementIndex][0]); // pour l'instant on genere en continue tant qu'on fait pas de fonction server qui renvoi un tableau de tous les types un a un
-      CurrentCompleted = false;
+      Level.currentCompleted = false;
     }
     else {
       CurrentObject = checkCurrentComplete(CurrentObject);
@@ -78,7 +79,7 @@ function updateLevel(mode){
         if(mode == "ranked") updateRanked();
         else if(mode == "practice") updatePractice();
         CurrentObject = null;
-        CurrentCompleted = true;
+        Level.currentCompleted = true;
         Level.elementIndex++;
       }
     } 
