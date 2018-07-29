@@ -11,6 +11,13 @@ var gameHandlers = {
 			info("Game found, transitioning...");
 			$("#menu").hide();
 
+			if(game){
+                console.log("destroying game");
+                game.destroy(true, true);
+                game = null;
+                $("#game").html("");
+            }
+
 			$("#searching").hide();
 			$("#ranked").show();
 
@@ -21,18 +28,12 @@ var gameHandlers = {
 	            startTimer(15, $("#timer"), function(){
 	            	gameHandlers.out.forceLeave();
 	            	mainMenu();
+	            	info("You left the game", 3);
 	            });
 	        }, 1000);
 		},
 
 		gameStart : function(){
-			if(game){
-                console.log("destroying game");
-                game.destroy(true, true);
-                game = null;
-                $("#game").html("");
-            }
-
 	        launch("ranked", this.level);
 	        
 	        setTimeout(function(){

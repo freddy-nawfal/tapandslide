@@ -27,23 +27,27 @@ io.on('connection', function(socket){
   	console.log(socket.id+" left the matchmaking");
   });
   socket.on("forceLeave", function(){
-	delete waitingRanked[socket.id];
 	if(socket.roomID){
   		var toS;
 	  	if(rooms[socket.roomID].clients[0].id != socket.id){ 
 	  		toS = rooms[socket.roomID].clients[0].id;
 	  		rooms[socket.roomID].clients[0].roomID = 0;
+	  		rooms[socket.roomID].clients[1].roomID = 0;
 	  	}
 	  	else {
 	  		toS = rooms[socket.roomID].clients[1].id;
 	  		rooms[socket.roomID].clients[1].roomID = 0;
+	  		rooms[socket.roomID].clients[0].roomID = 0;
 	  	}
 
 	  	
 	  	io.to(toS).emit('opponentLeft');
 
 	  	delete rooms[socket.roomID];
+	  	delete waitingRanked[socket.id];
 	 }
+	 
+
   });
 
 
