@@ -11,6 +11,13 @@
  
     <body ng-app="main">
     	<div id="menu">
+
+            <div style="text-align: right;">
+                <div id="p1" style="font-size: 2px; position: absolute; z-index: 3; display:inline-block;"></div>
+            </div>
+             
+
+
             <img src="assets/logo.png" width="100%">
             <div id="buttons">
                 <button onclick="$(this).hide(); $('#searching').show(); playRanked();" class="menuBtn" id="ranked">Ranked</button>
@@ -26,10 +33,31 @@
     	<div id="msg" style="display: none"></div>
 
         <div id="inGameLoader" style="display: none;"><img src="assets/loader.gif" width="20px"></div>
+        <div id="sideMenu" style="display: none;"> 
+            <button onclick="leave()" id="leaveBtn"><-</button> 
+
+            <div style="text-align: right;
+            z-index: 3;
+            position: absolute;
+            left: 10vw;
+            top: 5px;">
+                <div id="player1" style="font-size: 2px; position: absolute; z-index: 4; display:inline-block;"></div>
+            </div>
+
+            <div style="text-align: right;
+            z-index: 3;
+            position: absolute;
+            left: 90vw;
+            top: 5px;">
+                <div id="player2" style="font-size: 2px; position: absolute; z-index: 4; display:inline-block;"></div>
+            </div>
+
+        </div>
 		<div id="game"></div>
 
 
-		<script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/radialprogress.js"></script>
         <script type="text/javascript" src="js/socket.io.js"></script>
 		<script type="text/javascript" src="js/notify.js"></script>
         <script type="text/javascript" src="js/multiplayer/gHandlers.js"></script>
@@ -38,6 +66,21 @@
 		<script type="text/javascript" src="js/utilities.js"></script>
 		<script src="js/game.js"></script>
     	<script type="text/javascript">
+            var p1=new RadialProgress(document.getElementById("player1"), {
+                colorBg:"rgba(0,0,0,0)",
+                colorFg:"#5fadbe",
+                thick:5,
+                noPercentage: true
+            });
+            var p2=new RadialProgress(document.getElementById("player2"), {
+                colorBg:"rgba(0,0,0,0)",
+                colorFg:"#cc5858",
+                thick:5,
+                noPercentage: true
+            });
+            p1.setValue(0);
+            p2.setValue(0);
+
     		
     		document.addEventListener('deviceready', Startup, false);
 
@@ -47,7 +90,7 @@
 
     		function Startup(){
 				// INIT SOCKET
-				socket = io.connect('http://diiiazote.tk:8000');
+				socket = io.connect('http://192.168.1.24:8000');
 
                 $("#game").hide();
                 $("#menu").hide();
@@ -66,11 +109,19 @@
                 });
             }
 
+            function leave(){
+                gameHandlers.out.forceLeave();
+                mainMenu();
+            }
+
             function mainMenu(){
                 $("#readyMenu").hide();
                 $("#inGameLoader").hide();
                 $("#menu").show();
+                $("#sideMenu").hide();
                 $("#game").hide();
+                p1.setValue(0);
+                p2.setValue(0);
                 if(game){
                     console.log("destroying game");
                     game.destroy(true, true);
@@ -136,10 +187,8 @@
                     if(searching){
                         $("#inGameLoader").show();
                     }
-                    else{
-                        hideNotification();
-                    }
                     $("#game").show();
+                    hideNotification();
                 }, 1000);
             }
 

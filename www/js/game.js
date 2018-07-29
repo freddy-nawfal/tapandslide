@@ -1,5 +1,8 @@
 var game;
 
+var sideMenuHeight = (window.innerHeight * 0.05)
+var actualHeight = window.innerHeight;
+
 var Level = {
   mode: null,
   levelElements: [],
@@ -23,7 +26,7 @@ function launch(mode,level){
 
   game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update });
   
-  console.log(Level);
+  $("#sideMenu").show();
 }
 
 function preload() {
@@ -32,6 +35,7 @@ function preload() {
   game.load.spritesheet('midSlider', 'assets/midslider-anim.png', 50, 50, 8);
   game.load.spritesheet('fleches', 'assets/fleches.png', 200, 100,3);
   game.load.image('spiral','assets/kawaii-spiral.png');
+  console.log(game.load.progress);
 }
 
 var CurrentObject;
@@ -42,8 +46,8 @@ function create() {
   game.stage.backgroundColor = "#ffffff";
 
   if(Level.mode == "ranked"){
-    MyProgression = game.add.text(10, 10, "ME: "+Level.myProgression+"%");
-    EnemyProgression = game.add.text(window.innerWidth-100, 10, "ENEMY: "+Level.enemyProgression+"%");
+    MyProgression = game.add.text(10, sideMenuHeight+10, "ME: "+Level.myProgression+"%");
+    EnemyProgression = game.add.text(window.innerWidth-100, sideMenuHeight+10, "ENEMY: "+Level.enemyProgression+"%");
 
     MyProgression.fontSize = 15;
     EnemyProgression.fontSize = 15;
@@ -71,7 +75,9 @@ function update() {
 
     if(Level.mode == "ranked"){
       MyProgression.setText("ME: "+Level.myProgression+"%");
-      EnemyProgression.setText("ENEMY: "+Level.enemyProgression+"%");      
+      EnemyProgression.setText("ENEMY: "+Level.enemyProgression+"%"); 
+      p1.progress = Level.myProgression/100;
+      p2.progress = Level.enemyProgression/100;  
     }
     else if(Level.mode == "practice"){
       MyProgression.setText("PROGRESSION: "+Math.round((Level.elementIndex/Level.levelElements.length)*100)+"%");

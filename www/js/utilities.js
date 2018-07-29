@@ -23,11 +23,11 @@ function generateButton(pos){
       objectWidth: game.cache.getFrameByIndex('button',1).width/2,
     };
     var x = (pos.button.x / 100) * window.innerWidth;
-    var y = (pos.button.y / 100) * window.innerHeight;
+    var y = (pos.button.y / 100) * actualHeight;
     if(x < NewObj.objectWidth)                      x = NewObj.objectWidth;
     if(x > window.innerWidth-NewObj.objectWidth)    x = window.innerWidth-NewObj.objectWidth;
     if(y < NewObj.objectWidth)                      y = NewObj.objectWidth;
-    if(y > window.innerHeight-NewObj.objectWidth)   y = window.innerHeight-NewObj.objectWidth;
+    if(y > actualHeight-NewObj.objectWidth)   y = actualHeight-NewObj.objectWidth;
 
 
     NewObj.Object = game.add.button(x, y, 'button', clickButton, this, 0, 0, 0);
@@ -54,11 +54,11 @@ function generateSlider(pos){
 
     //object
     var x = (pos.slider.start.x / 100) * window.innerWidth;
-    var y = (pos.slider.start.y / 100) * window.innerHeight;
+    var y = (pos.slider.start.y / 100) * actualHeight;
     if(x < NewObj.objectWidth)                      x = NewObj.objectWidth;
     if(x > window.innerWidth-NewObj.objectWidth)    x = window.innerWidth-NewObj.objectWidth;
     if(y < NewObj.objectWidth)                      y = NewObj.objectWidth;
-    if(y > window.innerHeight-NewObj.objectWidth)   y = window.innerHeight-NewObj.objectWidth;
+    if(y > actualHeight-NewObj.objectWidth)   y = actualHeight-NewObj.objectWidth;
     NewObj.Object = game.add.button(x, y, 'slider', clickSlider, this, 0, 0, 0)
     NewObj.Object.input.enableDrag();
     NewObj.Object.setFrames(0, 0, 1);
@@ -68,11 +68,11 @@ function generateSlider(pos){
 
     //point
     x = (pos.slider.middle.x / 100) * window.innerWidth;
-    y = (pos.slider.middle.y / 100) * window.innerHeight;
+    y = (pos.slider.middle.y / 100) * actualHeight;
     if(x < NewObj.pointWidth)                      x = NewObj.pointWidth;
     if(x > window.innerWidth-NewObj.pointWidth)    x = window.innerWidth-NewObj.pointWidth;
     if(y < NewObj.pointWidth)                      y = NewObj.pointWidth;
-    if(y > window.innerHeight-NewObj.pointWidth)   y = window.innerHeight-NewObj.pointWidth;
+    if(y > actualHeight-NewObj.pointWidth)   y = actualHeight-NewObj.pointWidth;
     NewObj.PointSlider = game.add.sprite(x, y, 'midSlider');
     NewObj.PointSlider.anchor.setTo(0.5, 0.5);
     var blink = NewObj.PointSlider.animations.add('blink');
@@ -80,11 +80,11 @@ function generateSlider(pos){
     NewObj.PointSlider.animations.play('blink', 15, true);
 
     x = (pos.slider.end.x / 100) * window.innerWidth;
-    y = (pos.slider.end.y / 100) * window.innerHeight;
+    y = (pos.slider.end.y / 100) * actualHeight;
     if(x < NewObj.pointWidth)                      x = NewObj.pointWidth;
     if(x > window.innerWidth-NewObj.pointWidth)    x = window.innerWidth-NewObj.pointWidth;
     if(y < NewObj.pointWidth)                      y = NewObj.pointWidth;
-    if(y > window.innerHeight-NewObj.pointWidth)   y = window.innerHeight-NewObj.pointWidth;
+    if(y > actualHeight-NewObj.pointWidth)   y = actualHeight-NewObj.pointWidth;
     NewObj.endPos = {
       endX: x,
       endY: y
@@ -117,7 +117,7 @@ function generateSpiral(){
       previousPointerAngle:null,
     };
     NewObj.spiralDistance = NewObj.spiralScaleMin*20;
-    NewObj.Object = game.add.sprite(window.innerWidth/2,window.innerHeight/2,'spiral');
+    NewObj.Object = game.add.sprite(window.innerWidth/2,actualHeight/2,'spiral');
     NewObj.Object.anchor.setTo(0.5,0.5);
     NewObj.Object.inputEnabled=true;
     NewObj.Object.scale.setTo(NewObj.spiralScaleMin);
@@ -171,7 +171,7 @@ function checkSlider(obj){
   if(obj.Object.x<obj.objectWidth) obj.Object.x = obj.objectWidth;
   if(obj.Object.x>window.innerWidth-obj.objectWidth) obj.Object.x = window.innerWidth-obj.objectWidth;
   if(obj.Object.y<obj.objectWidth) obj.Object.y = obj.objectWidth;
-  if(obj.Object.y>window.innerHeight-obj.objectWidth) obj.Object.y = window.innerHeight-obj.objectWidth;
+  if(obj.Object.y>actualHeight-obj.objectWidth) obj.Object.y = actualHeight-obj.objectWidth;
 
   //GERE LA FLECHE
   if(getDistance(obj.Object.x,obj.Object.y,obj.PointSlider.x,obj.PointSlider.y)>obj.minDistanceFleche){

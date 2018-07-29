@@ -24,8 +24,7 @@ var gameHandlers = {
 
 			setTimeout(function(){
 	            startTimer(15, $("#timer"), function(){
-		            gameHandlers.out.forceLeave();
-		            mainMenu();
+		            leave();
 		            info("You left the game", 3);
 		        });
 		        hideNotification();
@@ -35,18 +34,6 @@ var gameHandlers = {
 		},
 
 		gameStart : function(){
-			// ICI si tu veux le timer mais le level charge pas du coup
-			/*
-			setTimeout(function(){
-	        	hideNotification();
-	            $("#game").show();
-	            $("readyMenu").hide();
-				$("#ready").css('background','rgba(204, 88, 88, 0.35)');
-				$('#timer').html("");
-	        	launch("ranked", this.level);
-			},1000)
-			*/
-
 			// ICI tout marche mais ils attendent plus du coup
 			hideNotification();
 	        $("#game").show();
