@@ -21,26 +21,38 @@ var gameHandlers = {
 			$("#searching").hide();
 			$("#ranked").show();
 
-			 setTimeout(function(){
-	            hideNotification();
-	            $(ready).css('background','rgba(204, 88, 88, 0.35)');
-	            $("#readyMenu").show();
+			setTimeout(function(){
 	            startTimer(15, $("#timer"), function(){
-	            	gameHandlers.out.forceLeave();
-	            	mainMenu();
-	            	info("You left the game", 3);
-	            });
+		            gameHandlers.out.forceLeave();
+		            mainMenu();
+		            info("You left the game", 3);
+		        });
+		        hideNotification();
+	            $("#ready").css('background','rgba(204, 88, 88, 0.35)');
+	            $("#readyMenu").show();
 	        }, 1000);
 		},
 
 		gameStart : function(){
-	        launch("ranked", this.level);
-	        
-	        setTimeout(function(){
+			// ICI si tu veux le timer mais le level charge pas du coup
+			/*
+			setTimeout(function(){
+	        	hideNotification();
 	            $("#game").show();
 	            $("readyMenu").hide();
-				$(ready).css('background','rgba(204, 88, 88, 0.35)');
-	        }, 1000);
+				$("#ready").css('background','rgba(204, 88, 88, 0.35)');
+				$('#timer').html("");
+	        	launch("ranked", this.level);
+			},1000)
+			*/
+
+			// ICI tout marche mais ils attendent plus du coup
+			hideNotification();
+	        $("#game").show();
+	        $("readyMenu").hide();
+			$("#ready").css('background','rgba(204, 88, 88, 0.35)');
+			$('#timer').html("");
+	        launch("ranked", this.level);
 		},
 
 		opponentLeft : function(){
