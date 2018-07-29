@@ -10,6 +10,7 @@ var gameHandlers = {
 			searching = false;
 			info("Game found, transitioning...");
 			$("#menu").hide();
+			$("#inGameLoader").hide();
 
 			if(game){
                 console.log("destroying game");
@@ -62,12 +63,12 @@ var gameHandlers = {
 
 		progressionInfo : function(data){
 			if(data[0].id == myID){
-				Level.myProgression = data[0].value;
-				Level.enemyProgression = data[1].value;
+				Level.myProgression = Math.round(data[0].value);
+				Level.enemyProgression = Math.round(data[1].value);
 			}
 			else if(data[1].id == myID){
-				Level.myProgression = data[1].value;
-				Level.enemyProgression = data[0].value;
+				Level.myProgression = Math.round(data[1].value);
+				Level.enemyProgression = Math.round(data[0].value);
 			}
 		},
 

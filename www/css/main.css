@@ -3,6 +3,13 @@ canvas{
 	top: 0;
 	position: absolute;
 	background-color: white;
+	z-index: 1;
+}
+#inGameLoader{
+	position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
 }
 
 div#menu{

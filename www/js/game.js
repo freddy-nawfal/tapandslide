@@ -41,10 +41,17 @@ var EnemyProgression;
 function create() {
   game.stage.backgroundColor = "#ffffff";
 
-  MyProgression = game.add.text(10, 10, "ME: "+Level.myProgression+"%");
-  EnemyProgression = game.add.text(window.innerWidth-100, 10, "ENEMY: "+Level.enemyProgression+"%");
-  MyProgression.fontSize = 15;
-  EnemyProgression.fontSize = 15;
+  if(Level.mode == "ranked"){
+    MyProgression = game.add.text(10, 10, "ME: "+Level.myProgression+"%");
+    EnemyProgression = game.add.text(window.innerWidth-100, 10, "ENEMY: "+Level.enemyProgression+"%");
+
+    MyProgression.fontSize = 15;
+    EnemyProgression.fontSize = 15;
+  }
+  else if(Level.mode == "practice"){
+    MyProgression = game.add.text(window.innerWidth-155, 10, "PROGRESSION: "+Level.myProgression+"%");
+    MyProgression.fontSize = 15;
+  }
   
 }
 
@@ -62,8 +69,14 @@ function update() {
       mainMenu();
     }
 
-    MyProgression.setText("ME: "+Level.myProgression+"%");
-    EnemyProgression.setText("ENEMY: "+Level.enemyProgression+"%");
+    if(Level.mode == "ranked"){
+      MyProgression.setText("ME: "+Level.myProgression+"%");
+      EnemyProgression.setText("ENEMY: "+Level.enemyProgression+"%");      
+    }
+    else if(Level.mode == "practice"){
+      MyProgression.setText("PROGRESSION: "+Math.round((Level.elementIndex/Level.levelElements.length)*100)+"%");
+    }
+
   }
 }
 

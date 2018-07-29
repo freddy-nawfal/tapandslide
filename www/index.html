@@ -24,6 +24,8 @@
             <div id="timer"></div>
         </div>
     	<div id="msg" style="display: none"></div>
+
+        <div id="inGameLoader" style="display: none;"><img src="assets/loader.gif" width="20px"></div>
 		<div id="game"></div>
 
 
@@ -45,7 +47,7 @@
 
     		function Startup(){
 				// INIT SOCKET
-				socket = io.connect('http://localhost:8000');
+				socket = io.connect('http://diiiazote.tk:8000');
 
                 $("#game").hide();
                 $("#menu").hide();
@@ -66,6 +68,7 @@
 
             function mainMenu(){
                 $("#readyMenu").hide();
+                $("#inGameLoader").hide();
                 $("#menu").show();
                 $("#game").hide();
                 if(game){
@@ -90,7 +93,7 @@
             }
 
             function isReady(){
-                info("Waiting for opponent...");
+                info("Waiting for opponent "+'<img src="assets/loader.gif" width="14px">');
                 clearInterval(timerInterval);
                 gameHandlers.out.readyLaunch();
                 $("#readyMenu").hide();
@@ -131,7 +134,7 @@
                 launch("practice",level);
                 setTimeout(function(){
                     if(searching){
-                        info("Searching for an opponent...");
+                        $("#inGameLoader").show();
                     }
                     else{
                         hideNotification();
