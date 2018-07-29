@@ -21,6 +21,7 @@
     	</div>
         <div id="readyMenu" style="display: none;">
             <button onclick="$(this).css('background','#20e837'); isReady();" class="menuBtn" id="ready">Ready</button>
+            <div id="timer"></div>
         </div>
     	<div id="msg" style="display: none"></div>
 		<div id="game"></div>
@@ -44,7 +45,7 @@
 
     		function Startup(){
 				// INIT SOCKET
-				socket = io.connect('http://localhost:8000');
+				socket = io.connect('http://192.168.1.24:8000');
 
                 $("#game").hide();
                 $("#menu").hide();
@@ -73,6 +74,7 @@
                     game = null;
                     $("#game").html("");
                 }
+                clearInterval(timerInterval);
             }
 
     		function playRanked(){
@@ -88,7 +90,10 @@
             }
 
             function isReady(){
+                clearInterval(timerInterval);
                 gameHandlers.out.readyLaunch();
+                $("#readyMenu").hide();
+                info("Waiting for opponent...");
             }
 
 
@@ -132,6 +137,28 @@
                         hideNotification();
                     }
                     $("#game").show();
+                }, 1000);
+            }
+
+
+
+
+            var timerInterval;
+            function startTimer(duration, display, after) {
+                var timer = duration, minutes, seconds;
+                timerInterval = setInterval(function () {
+                    minutes = parseInt(timer / 60, 10)
+                    seconds = parseInt(timer % 60, 10);
+
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                    display.html(minutes + ":" + seconds);
+
+                    if (--timer < 0) {
+                        clearInterval(timerInterval);
+                        after();
+                    }
                 }, 1000);
             }
 

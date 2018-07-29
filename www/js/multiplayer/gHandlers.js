@@ -16,7 +16,12 @@ var gameHandlers = {
 
 			 setTimeout(function(){
 	            hideNotification();
+	            $(ready).css('background','rgba(204, 88, 88, 0.35)');
 	            $("#readyMenu").show();
+	            startTimer(15, $("#timer"), function(){
+	            	gameHandlers.out.forceLeave();
+	            	mainMenu();
+	            });
 	        }, 1000);
 		},
 
@@ -79,6 +84,10 @@ var gameHandlers = {
 
 		readyLaunch : function(){
 			socket.emit("readyLaunch");
+		},
+
+		forceLeave : function(){
+			socket.emit("forceLeave");
 		}
 	}
 	
