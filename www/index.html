@@ -7,6 +7,7 @@
 
         <script src="js/phaser.js"></script>
         <link rel="stylesheet" href="css/main.css" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
     </head>
  
     <body ng-app="main">
@@ -33,6 +34,7 @@
     	<div id="msg" style="display: none"></div>
 
         <div id="inGameLoader" style="display: none;"><img src="assets/loader.gif" width="20px"></div>
+    <!--
         <div id="sideMenu" style="display: none;"> 
             <button onclick="leave()" id="leaveBtn"><-</button> 
 
@@ -51,8 +53,30 @@
             top: 5px;">
                 <div id="player2" style="font-size: 2px; position: absolute; z-index: 4; display:inline-block;"></div>
             </div>
-
         </div>
+    -->
+
+        <div id="progressBars" style="display: none;">*
+            <div id="player1ProgressBar" 
+                style="text-align: right;
+                width: 15vw;
+                height: 15vw;
+                z-index: 3;
+                position: absolute;
+                left: 10vw;
+                top: 5vw;">
+            </div>
+            <div id="player2ProgressBar" 
+                style="text-align: right;
+                width: 15vw;
+                height: 15vw;
+                z-index: 3;
+                position: absolute;
+                right: 10vw;
+                top: 5vw;">
+            </div>
+        </div>
+
 		<div id="game"></div>
 
 
@@ -62,10 +86,12 @@
 		<script type="text/javascript" src="js/notify.js"></script>
         <script type="text/javascript" src="js/multiplayer/gHandlers.js"></script>
 		<script type="text/javascript" src="js/multiplayer/eHandlers.js"></script>
+        <script type="text/javascript" src="js/progressbar.min.js"></script>
 		<script src="cordova.js"></script>
 		<script type="text/javascript" src="js/utilities.js"></script>
 		<script src="js/game.js"></script>
     	<script type="text/javascript">
+/*           
             var p1=new RadialProgress(document.getElementById("player1"), {
                 colorBg:"rgba(0,0,0,0)",
                 colorFg:"#5fadbe",
@@ -80,8 +106,8 @@
             });
             p1.setValue(0);
             p2.setValue(0);
+*/   		
 
-    		
     		document.addEventListener('deviceready', Startup, false);
 
     		var socket;
@@ -90,7 +116,7 @@
 
     		function Startup(){
 				// INIT SOCKET
-				socket = io.connect('http://192.168.1.24:8000');
+				socket = io.connect('http://localhost:8000');
 
                 $("#game").hide();
                 $("#menu").hide();
@@ -118,10 +144,11 @@
                 $("#readyMenu").hide();
                 $("#inGameLoader").hide();
                 $("#menu").show();
-                $("#sideMenu").hide();
+                //$("#sideMenu").hide();
+                $("#progressBars").hide();
                 $("#game").hide();
-                p1.setValue(0);
-                p2.setValue(0);
+                //p1.setValue(0);
+                //p2.setValue(0);
                 if(game){
                     console.log("destroying game");
                     game.destroy(true, true);

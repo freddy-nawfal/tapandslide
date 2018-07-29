@@ -40,6 +40,7 @@ var gameHandlers = {
 	        $("readyMenu").hide();
 			$("#ready").css('background','rgba(204, 88, 88, 0.35)');
 			$('#timer').html("");
+			$("#progressBars").show();
 	        launch("ranked", this.level);
 		},
 
@@ -57,6 +58,8 @@ var gameHandlers = {
 				Level.myProgression = Math.round(data[1].value);
 				Level.enemyProgression = Math.round(data[0].value);
 			}
+			player1Bar.animate(Level.myProgression/100);
+			player2Bar.animate(Level.enemyProgression/100);
 		},
 
 		winner : function(){
