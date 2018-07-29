@@ -58,11 +58,11 @@ io.on('connection', function(socket){
   	var roomID = socket.roomID;
   	var room = rooms[roomID];
   	if(room.clients[0].id == socket.id)
-  		room.clients[0].ready = true;
+  		room.client1Ready = true;
   	else if(room.clients[1].id == socket.id)
-  		room.clients[1].ready = true;
+  		room.client2Ready = true;
 
-  	if(room.clients[0].ready && room.clients[1].ready){
+  	if(room.client1Ready && room.client2Ready){
   		io.to(roomID).emit("gameStart");
   	}
   });

@@ -14,7 +14,10 @@ var gameHandlers = {
 			$("#searching").hide();
 			$("#ranked").show();
 
-			$("readyMenu").show();
+			 setTimeout(function(){
+	            hideNotification();
+	            $("#readyMenu").show();
+	        }, 1000);
 		},
 
 		gameStart : function(){
@@ -31,10 +34,9 @@ var gameHandlers = {
 	        launch("ranked", this.level);
 	        
 	        setTimeout(function(){
-	            hideNotification();
 	            $("#game").show();
 	        }, 1000);
-		}
+		},
 
 		opponentLeft : function(){
 			mainMenu();
@@ -55,6 +57,7 @@ var gameHandlers = {
 		winner : function(data){
 			$("#game").hide();
 			$("#menu").show();
+			$("#readyMenu").hide();
 			if(data == myID){
 				info("YOU WON", 5);
 			}
