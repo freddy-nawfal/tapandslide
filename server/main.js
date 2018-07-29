@@ -54,6 +54,19 @@ io.on('connection', function(socket){
 	 
   });
 
+  socket.on("readyLaunch", function(){
+  	var roomID = socket.roomID;
+  	var room = rooms[roomID];
+  	if(room.clients[0].id == socket.id)
+  		room.clients[0].ready = true;
+  	else if(room.clients[1].id == socket.id)
+  		room.clients[1].ready = true;
+
+  	if(room.clients[0].ready && room.clients[1].ready){
+  		io.to(roomID).emit("gameStart");
+  	}
+  });
+
 
   socket.on('elementFinished', function(id){
   	var roomID = socket.roomID;
@@ -98,7 +111,7 @@ io.on('connection', function(socket){
 
 
   
-  	// ici frr tu verifie aussi kil a fini esh
+  	// ici frr tu verifie aussi kil a fini wesh
   	if(c1Progression == 100 || c2Progression == 100){
   		if(c1Progression == 100){
   			io.to(roomID).emit('winner', room.clients[0].id);

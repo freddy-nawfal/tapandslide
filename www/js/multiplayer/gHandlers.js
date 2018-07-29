@@ -6,13 +6,20 @@ var gameHandlers = {
 			this.level = data;
 		},
 
-		joinedRoom : function(data){
+		joinedRoom : function(){
 			searching = false;
 			info("Game found, transitioning...");
 			$("#menu").hide();
 
 			$("#searching").hide();
 			$("#ranked").show();
+
+			$("readyMenu").show();
+		},
+
+		gameStart : function(){
+			$(ready).css('background','rgba(204, 88, 88, 0.35)');
+			$("readyMenu").hide();
 
 			if(game){
                 console.log("destroying game");
@@ -27,7 +34,7 @@ var gameHandlers = {
 	            hideNotification();
 	            $("#game").show();
 	        }, 1000);
-		},
+		}
 
 		opponentLeft : function(){
 			mainMenu();
@@ -68,6 +75,10 @@ var gameHandlers = {
 
 		abandonSearch : function(){
 			socket.emit("abandonSearch");
+		},
+
+		readyLaunch : function(){
+			socket.emit("readyLaunch");
 		}
 	}
 	

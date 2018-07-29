@@ -19,6 +19,9 @@
             </div>
 
     	</div>
+        <div id="readyMenu" style="display: none;">
+            <button onclick="$(this).css('background','#20e837'); isReady();" class="menuBtn" id="ready">Ready</button>
+        </div>
     	<div id="msg" style="display: none"></div>
 		<div id="game"></div>
 
@@ -41,7 +44,7 @@
 
     		function Startup(){
 				// INIT SOCKET
-				socket = io.connect('http://diiiazote.tk:8000');
+				socket = io.connect('http://localhost:8000');
 
                 $("#game").hide();
                 $("#menu").hide();
@@ -63,18 +66,17 @@
             function mainMenu(){
                 $("#menu").show();
                 $("#game").hide();
+                $("#readyMenu").hide();
                 if(game){
                     console.log("destroying game");
                     game.destroy(true, true);
                     game = null;
                     $("#game").html("");
                 }
-
             }
 
     		function playRanked(){
                 searching = true;
-
 
     			gameHandlers.out.search("ranked");
     		}
@@ -85,10 +87,15 @@
                 $("#ranked").show();
             }
 
+            function isReady(){
+                gameHandlers.out.readyLaunch();
+            }
+
 
     		function loadGameHandlers(){
     			socket.on('level', gameHandlers.in.loadLevel);
                 socket.on("joinedRoom", gameHandlers.in.joinedRoom);
+                socket.on("gameStart", gameHandlers.in.gameStart);
                 socket.on('opponentLeft', gameHandlers.in.opponentLeft);
                 socket.on('progressionInfo', gameHandlers.in.progressionInfo);
                 socket.on('winner', gameHandlers.in.winner);
