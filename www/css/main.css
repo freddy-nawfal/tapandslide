@@ -1,9 +1,15 @@
+html,body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+body{
+    background-color: #444545;
+}
+
 #game canvas{
-	left: 0;
-	top: 0;
-	position: absolute;
-	background-color: white;
-	z-index: 1;
+	z-index: 2;
 }
 #inGameLoader{
 	position: absolute;
@@ -49,11 +55,6 @@ div#msg{
     height: 10%;
     padding: 10px 0;
     border: 2px solid #cc5858;
-}
-
-
-body{
-	background-color: #444545;
 }
 
 .menuBtn{

@@ -1,7 +1,7 @@
 var game;
 
-var sideMenuHeight = (window.innerHeight * 0.05)
-var actualHeight = window.innerHeight;
+//var sideMenuHeight = (window.innerHeight * 0.05)
+var actualHeight;
 
 var Level = {
   mode: null,
@@ -23,10 +23,9 @@ function launch(mode,level){
     enemyProgression: 0,
     currentCompleted: true
   };
-
-  game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update });
-  
-  $("#sideMenu").show();
+  actualHeight = document.getElementById('game').offsetHeight;
+  $("#menuTop").show();
+  game = new Phaser.Game(window.innerWidth, actualHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update });
 }
 
 function preload() {
@@ -44,15 +43,13 @@ var EnemyProgression;
 
 function create() {
   game.stage.backgroundColor = "#ffffff";
+  game.input.enabled=false;
+  startTimer(3, $("#beginTimer"), function(){
+    game.input.enabled=true;
+    $("#beginTimer").hide();
+  });
 
   if(Level.mode == "ranked"){
-    /*
-    MyProgression = game.add.text(10, sideMenuHeight+10, "ME: "+Level.myProgression+"%");
-    EnemyProgression = game.add.text(window.innerWidth-100, sideMenuHeight+10, "ENEMY: "+Level.enemyProgression+"%");
-
-    MyProgression.fontSize = 15;
-    EnemyProgression.fontSize = 15;
-    */
   }
   else if(Level.mode == "practice"){
     MyProgression = game.add.text(window.innerWidth-155, 10, "PROGRESSION: "+Level.myProgression+"%");
@@ -76,12 +73,7 @@ function update() {
     }
 
     if(Level.mode == "ranked"){
-      /*
-      MyProgression.setText("ME: "+Level.myProgression+"%");
-      EnemyProgression.setText("ENEMY: "+Level.enemyProgression+"%"); 
-      p1.progress = Level.myProgression/100;
-      p2.progress = Level.enemyProgression/100;
-      */
+      
     }
     else if(Level.mode == "practice"){
       MyProgression.setText("PROGRESSION: "+Math.round((Level.elementIndex/Level.levelElements.length)*100)+"%");

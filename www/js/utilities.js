@@ -426,7 +426,7 @@ function shuffleArray(a) { //O(n) on se met bien
 }
 
 var player1Bar = new ProgressBar.Circle(player1ProgressBar, {
-  color: '#000',
+  color: '#FFF',
   // This has to be the same size as the maximum width to
   // prevent clipping
   strokeWidth: 30,
@@ -449,7 +449,7 @@ var player1Bar = new ProgressBar.Circle(player1ProgressBar, {
 });
 player1Bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
 var player2Bar = new ProgressBar.Circle(player2ProgressBar, {
-  color: '#000',
+  color: '#FFF',
   // This has to be the same size as the maximum width to
   // prevent clipping
   strokeWidth: 30,
@@ -471,3 +471,8 @@ var player2Bar = new ProgressBar.Circle(player2ProgressBar, {
   }
 });
 player2Bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+
+function progressBarDisableClick(){
+  $('player1Bar').click(false);
+  $('player2Bar').click(false);
+}

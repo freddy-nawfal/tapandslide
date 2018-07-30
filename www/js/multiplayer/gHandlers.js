@@ -8,9 +8,10 @@ var gameHandlers = {
 
 		joinedRoom : function(){
 			searching = false;
-			info("Game found, transitioning...");
 			$("#menu").hide();
 			$("#inGameLoader").hide();
+			$("#menuTop").hide();
+			info("Game found, transitioning...");
 
 			if(game){
                 console.log("destroying game");
@@ -23,6 +24,7 @@ var gameHandlers = {
 			$("#ranked").show();
 
 			setTimeout(function(){
+				clearInterval(timerInterval);
 	            startTimer(15, $("#timer"), function(){
 		            leave();
 		            info("You left the game", 3);
@@ -34,13 +36,11 @@ var gameHandlers = {
 		},
 
 		gameStart : function(){
-			// ICI tout marche mais ils attendent plus du coup
-			hideNotification();
+			hideNotification(true);
 	        $("#game").show();
 	        $("readyMenu").hide();
 			$("#ready").css('background','rgba(204, 88, 88, 0.35)');
 			$('#timer').html("");
-			$("#progressBars").show();
 	        launch("ranked", this.level);
 		},
 
