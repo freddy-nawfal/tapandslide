@@ -11,7 +11,7 @@
     </head>
  
     <body ng-app="main">
-    	<div id="menu">
+    	<div id="menu" style="display: none;">
 
             <div style="text-align: right;">
                 <div id="p1" style="font-size: 2px; position: absolute; z-index: 3; display:inline-block;"></div>
@@ -83,6 +83,14 @@
     	<script type="text/javascript">	
 
     		document.addEventListener('deviceready', Startup, false);
+            document.addEventListener("backbutton", onBackKeyDown, false);
+
+            function onBackKeyDown() {
+                if(Level.mode){
+                    Level.mode = null;
+                    leave();
+                }
+            }
 
     		var socket;
             var searching = false;

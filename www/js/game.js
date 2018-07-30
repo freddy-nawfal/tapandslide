@@ -52,8 +52,8 @@ function create() {
   if(Level.mode == "ranked"){
   }
   else if(Level.mode == "practice"){
-    MyProgression = game.add.text(window.innerWidth-155, 10, "PROGRESSION: "+Level.myProgression+"%");
-    MyProgression.fontSize = 15;
+    //MyProgression = game.add.text(window.innerWidth-155, 10, "PROGRESSION: "+Level.myProgression+"%");
+    //MyProgression.fontSize = 15;
   }
   
 }
@@ -76,7 +76,8 @@ function update() {
       
     }
     else if(Level.mode == "practice"){
-      MyProgression.setText("PROGRESSION: "+Math.round((Level.elementIndex/Level.levelElements.length)*100)+"%");
+      //MyProgression.setText("PROGRESSION: "+Math.round((Level.elementIndex/Level.levelElements.length)*100)+"%");
+      player1Bar.animate((Level.elementIndex/Level.levelElements.length));
     }
 
   }

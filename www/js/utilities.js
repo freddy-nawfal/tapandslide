@@ -430,7 +430,7 @@ var player1Bar = new ProgressBar.Circle(player1ProgressBar, {
   // This has to be the same size as the maximum width to
   // prevent clipping
   strokeWidth: 30,
-  trailWidth: 0,
+  trailWidth: 5,
   easing: 'easeInOut',
   duration: 1400,
   text: {
@@ -444,7 +444,7 @@ var player1Bar = new ProgressBar.Circle(player1ProgressBar, {
     circle.path.setAttribute('stroke-width', state.width);
 
     var value = Math.round(circle.value() * 100);
-    circle.setText(value);
+    circle.setText(value+"%");
   }
 });
 player1Bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
@@ -453,7 +453,7 @@ var player2Bar = new ProgressBar.Circle(player2ProgressBar, {
   // This has to be the same size as the maximum width to
   // prevent clipping
   strokeWidth: 30,
-  trailWidth: 0,
+  trailWidth: 5,
   easing: 'easeInOut',
   duration: 1400,
   text: {
@@ -467,7 +467,7 @@ var player2Bar = new ProgressBar.Circle(player2ProgressBar, {
     circle.path.setAttribute('stroke-width', state.width);
 
     var value = Math.round(circle.value() * 100);
-    circle.setText(value);
+    circle.setText(value+"%");
   }
 });
 player2Bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
