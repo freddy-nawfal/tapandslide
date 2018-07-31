@@ -5,7 +5,7 @@ html,body {
 }
 
 body{
-    background-color: #444545;
+    background-image: url("../assets/bgMenu.jpg");
 }
 
 #game canvas{
@@ -69,7 +69,7 @@ div#msg{
     font-size: 20px;
     border: 2px solid #cc5858;
     color: white;
-    background: rgba(204, 88, 88, 0.35);
+    background: rgba(221,45,45 1);
 }
 .menuBtn:hover{
 	background-color: #cc5858;
@@ -85,7 +85,4 @@ div#msg{
     font-size: 20px;
     font-family: CURSIVE;
     text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #FFF, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
-}
-.progressBar{
-	width: 20px;
 }
