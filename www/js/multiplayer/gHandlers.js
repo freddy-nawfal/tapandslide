@@ -33,6 +33,9 @@ var gameHandlers = {
 	            $("#ready").css('background','rgba(204, 88, 88, 0.35)');
 	            $("#readyMenu").show();
 	        }, 1000);
+
+	        player1Bar.animate(0);
+			player2Bar.animate(0);
 		},
 
 		gameStart : function(){

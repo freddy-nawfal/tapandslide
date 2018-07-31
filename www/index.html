@@ -19,9 +19,9 @@
              
             <img id="logoMenu" src="assets/logo.png" width="100%">
             <div id="buttons">
-                <button onclick="$(this).hide(); $('#searching').show(); playRanked();" class="menuBtn" id="ranked">Ranked</button>
-                <button class="menuBtn" style="display: none;" id="searching" onclick="abandonSearch();">Searching <img src="assets/loader.gif" width="16px"></button>
-                <button onclick="playPractice()" class="menuBtn">Practice</button>
+                <a onclick="$(this).hide(); $('#searching').show(); playRanked();" class="menuBtn" id="ranked" href="#">Ranked</a>
+                <a class="menuBtn" style="display: none;" id="searching" onclick="abandonSearch();" href="#">Searching <img src="assets/loader.gif" width="25px"></a>
+                <a onclick="playPractice()" class="menuBtn" href="#">Practice</a>
             </div>
 
     	</div>
@@ -33,9 +33,7 @@
 
         <div id="inGameLoader" style="display: none;"><img src="assets/loader.gif" width="20px"></div>
 
-        <div id="menuTop"
-            style="display: none;
-            height: 10vh;">
+        <div id="menuTop" >
             <div id="player1ProgressBar" 
                 style="text-align: right;
                 height: 10vh;
@@ -147,6 +145,7 @@
                 gameHandlers.out.abandonSearch();
                 $("#searching").hide();
                 $("#ranked").show();
+                searching = false;
             }
 
             function isReady(){
@@ -190,6 +189,9 @@
                 setTimeout(function(){
                     if(searching){
                         $("#inGameLoader").show();
+                    }
+                    else{
+                        $("#inGameLoader").hide();
                     }
                     hideNotification();
                     $("#game").show();
