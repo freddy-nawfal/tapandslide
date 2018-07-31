@@ -20,7 +20,7 @@ function generateButton(pos){
       Object: null,
       Completed: false,
       isClicked: false,
-      objectWidth: game.cache.getFrameByIndex('button',1).width/2,
+      objectWidth: (game.cache.getImage('button').width/2) * (userScale*ourSpriteScale),
     };
     var x = (pos.button.x / 100) * window.innerWidth;
     var y = (pos.button.y / 100) * actualHeight;
@@ -31,10 +31,10 @@ function generateButton(pos){
 
 
     NewObj.Object = game.add.button(x, y, 'button', clickButton, this, 0, 0, 0);
-    NewObj.Object.setFrames(0, 0, 1);
     NewObj.Object.input.pixelPerfectOver = true;
     NewObj.Object.input.pixelPerfectClick = true;
     NewObj.Object.anchor.setTo(0.5, 0.5);
+    NewObj.Object.scale.setTo(userScale*ourSpriteScale);
     return NewObj;
 }
 
@@ -47,8 +47,8 @@ function generateSlider(pos){
       SliderMidPoint: false,
       endPos: null,
       Fleches:null,
-      objectWidth: game.cache.getFrameByIndex('slider',1).width/2,
-      pointWidth: game.cache.getFrameByIndex('midSlider',1).width/2,
+      objectWidth: (game.cache.getImage('slider').width/2) * (userScale*ourSpriteScale),
+      pointWidth: (game.cache.getImage('midSlider').width/2) * (userScale*ourSpriteScale),
       minDistanceFleche: null
     };
 
@@ -59,12 +59,12 @@ function generateSlider(pos){
     if(x > window.innerWidth-NewObj.objectWidth)    x = window.innerWidth-NewObj.objectWidth;
     if(y < NewObj.objectWidth)                      y = NewObj.objectWidth;
     if(y > actualHeight-NewObj.objectWidth)   y = actualHeight-NewObj.objectWidth;
-    NewObj.Object = game.add.button(x, y, 'slider', clickSlider, this, 0, 0, 0)
+    NewObj.Object = game.add.button(x, y, 'slider', clickSlider, this, 0, 0, 0);
     NewObj.Object.input.enableDrag();
-    NewObj.Object.setFrames(0, 0, 1);
     NewObj.Object.input.pixelPerfectOver = true;
     NewObj.Object.input.pixelPerfectClick = true;
     NewObj.Object.anchor.setTo(0.5, 0.5);
+    NewObj.Object.scale.setTo(userScale*ourSpriteScale);
 
     //point
     x = (pos.slider.middle.x / 100) * window.innerWidth;
@@ -75,9 +75,7 @@ function generateSlider(pos){
     if(y > actualHeight-NewObj.pointWidth)   y = actualHeight-NewObj.pointWidth;
     NewObj.PointSlider = game.add.sprite(x, y, 'midSlider');
     NewObj.PointSlider.anchor.setTo(0.5, 0.5);
-    var blink = NewObj.PointSlider.animations.add('blink');
-    blink.enableUpdate = true;
-    NewObj.PointSlider.animations.play('blink', 15, true);
+    NewObj.PointSlider.scale.setTo(userScale*ourSpriteScale);
 
     x = (pos.slider.end.x / 100) * window.innerWidth;
     y = (pos.slider.end.y / 100) * actualHeight;
@@ -110,8 +108,8 @@ function generateSpiral(){
       isClicked: false,
       spiralScore:0,
       spiralScoreMax: 360*4,
-      spiralScaleMin:0.4,
-      spiralScaleMax:0.9,
+      spiralScaleMin:4 * (userScale*ourSpriteScale),
+      spiralScaleMax:9 * (userScale*ourSpriteScale),
       spiralSide:null,
       spiralDistance: null,
       previousPointerAngle:null,

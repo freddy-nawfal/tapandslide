@@ -5,7 +5,9 @@ html,body {
 }
 
 body{
-    background-image: url("../assets/bgMenu.jpg");
+    background-image: url("../assets/bgm.png");
+    background-size: cover;
+    background-position: right;
 }
 
 #game canvas{

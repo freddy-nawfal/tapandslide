@@ -2,6 +2,9 @@ var game;
 
 //var sideMenuHeight = (window.innerHeight * 0.05)
 var actualHeight;
+var widthReference = 540;
+var ourSpriteScale = 1/6; //(nos sprites 600*600) donc on veut que par rapport a la ref on est 100px
+var userScale;
 
 var Level = {
   mode: null,
@@ -26,14 +29,16 @@ function launch(mode,level){
   actualHeight = document.getElementById('game').offsetHeight;
   $("#menuTop").show();
   game = new Phaser.Game(window.innerWidth, actualHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update });
+  userScale = window.innerWidth/widthReference;
 }
 
 function preload() {
-  game.load.spritesheet('button', 'assets/button.png', 100, 100, 2);
-  game.load.spritesheet('slider', 'assets/slider.png', 100, 100, 2);
-  game.load.spritesheet('midSlider', 'assets/midslider-anim.png', 50, 50, 8);
+  game.load.image('background', 'assets/background-game.png');
+  game.load.image('button', 'assets/button-normal.png');
+  game.load.image('slider', 'assets/slider-normal.png');
+  game.load.image('midSlider', 'assets/mid-slider-normal.png');
   game.load.spritesheet('fleches', 'assets/fleches.png', 200, 100,3);
-  game.load.image('spiral','assets/kawaii-spiral.png');
+  game.load.image('spiral','assets/spiral-normal.png');
   console.log(game.load.progress);
 }
 
@@ -42,7 +47,10 @@ var MyProgression;
 var EnemyProgression;
 
 function create() {
-  game.stage.backgroundColor = "#ffffff";
+  var background = game.add.sprite(window.innerWidth/2,actualHeight/2,'background');
+  background.anchor.setTo(0.5,0.5);
+  background.scale.setTo(window.innerWidth/game.cache.getImage('background').width);
+
   game.input.enabled=false;
   startTimer(3, $("#beginTimer"), function(){
     game.input.enabled=true;
