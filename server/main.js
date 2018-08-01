@@ -227,7 +227,8 @@ function generateRoom(roomID) {
 }
 
 function generateLevel(roomID){
-	rooms[roomID].level = new Classes.level(50);
+	var numberOfElementsInLevel = Math.floor(Math.random() * 60) + 30;
+	rooms[roomID].level = new Classes.level(numberOfElementsInLevel);
 	var tab = rooms[roomID].level.getElements();
 	for (var i = 0; i < tab.length; i++) {
 		rooms[roomID].client1Tab[tab[i][0]] = {done: false};

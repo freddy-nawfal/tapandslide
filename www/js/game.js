@@ -47,7 +47,6 @@ function preload() {
   game.load.image('midSlider', 'assets/mid-slider-normal.png');
   game.load.spritesheet('fleches', 'assets/fleches-anim.png', 600, 300,11);
   game.load.image('spiral','assets/spiral-normal.png');
-  console.log(game.load.progress);
 }
 
 var CurrentObject;
