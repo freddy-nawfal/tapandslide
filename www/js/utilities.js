@@ -474,3 +474,10 @@ function progressBarDisableClick(){
   $('player1Bar').click(false);
   $('player2Bar').click(false);
 }
+
+function retourMenu(time){
+  setTimeout(function(){
+    Level.ready = false;
+    mainMenu();
+  },time);
+}

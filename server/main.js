@@ -90,6 +90,18 @@ io.on('connection', function(socket){
   	}
   });
 
+  socket.on('bothTimerGo', function(){
+  	var roomID = socket.roomID;
+  	var room = rooms[roomID];
+  	if(room.clients[0].id == socket.id)
+  		room.client1Go = true;
+  	else if(room.clients[1].id == socket.id)
+  		room.client2Go = true;
+
+  	if(room.client1Go && room.client2Go){
+  		io.to(roomID).emit("gameGo");
+  	}
+  });
 
   socket.on('elementFinished', function(id){
   	var roomID = socket.roomID;
@@ -137,12 +149,10 @@ io.on('connection', function(socket){
   	// ici frr tu verifie aussi kil a fini wesh
   	if(c1Progression == 100 || c2Progression == 100){
   		if(c1Progression == 100){
-  			io.to(room.clients[0].id).emit('winner');
-  			io.to(room.clients[1].id).emit('loser');
+  			io.to(roomID).emit('gameFinished',room.clients[0].id);
   		}
   		else{
-  			io.to(room.clients[1].id).emit('winner');
-  			io.to(room.clients[0].id).emit('loser');
+  			io.to(roomID).emit('gameFinished',room.clients[1].id);
   		}
 
   		room.clients[0].roomID = null;

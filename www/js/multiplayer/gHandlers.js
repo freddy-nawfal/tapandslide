@@ -52,6 +52,14 @@ var gameHandlers = {
 			info("Your opponent left", 3);
 		},
 
+		gameGo : function(){
+			$('#beginTimer').html('GO!');
+			game.input.enabled=true;
+			setTimeout(function(){
+				$('#beginTimer').hide();
+			},2000);
+		},
+
 		progressionInfo : function(data){
 			if(data[0].id == myID){
 				Level.myProgression = Math.round(data[0].value);
@@ -65,20 +73,20 @@ var gameHandlers = {
 			player2Bar.animate(Level.enemyProgression/100);
 		},
 
-		winner : function(){
-			info("YOU WON", 5);
-			mainMenu();
-		},
-
-		loser : function(){
-			info("YOU LOST", 5);
-			mainMenu();
+		gameFinished : function(id){
+			Level.gameEnded = true;
+			Level.winner = id;
+			retourMenu(5000);
 		}
 	},
 
 	out : {
 		elementFinished : function(id){
 			socket.emit("elementFinished", id);
+		},
+
+		bothTimerGo : function(){
+			socket.emit('bothTimerGo');
 		},
 
 		search : function(mode){

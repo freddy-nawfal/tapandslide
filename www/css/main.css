@@ -2,6 +2,14 @@
     font-family: OrangeJuice;
     src: url("../fonts/jabjai_heavy.TTF");
 }
+@font-face {
+    font-family: GillSansUltraBold;
+    src: url("../fonts/GillSansUltraBold.TTF");
+}
+@font-face {
+    font-family: Lato;
+    src: url("../fonts/Lato-Black.TTF");
+}
 
 html,body {
   padding: 0;
@@ -27,14 +35,7 @@ body{
 #menuTop{
 	display: none;
     height: 10vh;
-    border-bottom: 2px solid black;
-}
-#leaveBtn{
-	margin: 5px;
-    border: 2px solid #cc5858;
-    border-radius: 5px;
-    color: white;
-    background: rgba(204, 88, 88, 0.35);
+    box-shadow:0px -2px 0px 0px black inset;
 }
 
 div#menu{
@@ -69,11 +70,11 @@ div#msg{
     padding: 8px;
     margin-top: 10px;
     font-family: OrangeJuice;
-    font-size: 35px;
-    color: white;
+    font-size: 30px;
+    color: black;
     transition: .3s;
     background-color: #16161b3b;
-    box-shadow: 1px 1px 1px black;
+    box-shadow: 0px 0px 2px  1px black inset;
     display: block;
 }
 
@@ -98,11 +99,58 @@ a:active {
 	margin-top: 10%;
 	margin-bottom: 10%;
 }
+
+#ready{
+    width: 100%;
+    border-radius: 5px;
+    padding: 8px;
+    margin-top: 10px;
+    font-family: OrangeJuice;
+    font-size: 30px;
+    color: black;
+    transition: .3s;
+    background-color: #16161b3b;
+    box-shadow: 0px 0px 2px  1px black inset;
+}
+
 #timer{
 	text-align: center;
     padding: 20px;
     color: black;
     font-size: 20px;
-    font-family: CURSIVE;
+    font-family: Lato;
     text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #FFF, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+}
+
+#beginTimer{
+    font-family: Lato;
+    font-size: 20px;
+    color: black;
+    text-align: center;
+    height: 10vh;
+    width: 10vh;
+    position: relative;
+    z-index: 3;
+    margin:auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#player1ProgressBar{
+    text-align: right;
+    height: 10vh;
+    width: 10vh;
+    position:absolute;
+    z-index: 3;
+    left: 10vw;
+}
+
+#player2ProgressBar{
+    text-align: right;
+    height: 10vh;
+    width: 10vh;
+    position: absolute;
+    z-index: 3;
+    right: 10vw;
 }
