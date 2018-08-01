@@ -45,7 +45,7 @@ function preload() {
   game.load.image('button', 'assets/button-normal.png');
   game.load.image('slider', 'assets/slider-normal.png');
   game.load.image('midSlider', 'assets/mid-slider-normal.png');
-  game.load.spritesheet('fleches', 'assets/fleches.png', 200, 100,3);
+  game.load.spritesheet('fleches', 'assets/fleches-anim.png', 600, 300,11);
   game.load.image('spiral','assets/spiral-normal.png');
   console.log(game.load.progress);
 }

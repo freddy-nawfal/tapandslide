@@ -93,10 +93,11 @@ function generateSlider(pos){
     NewObj.Fleches = game.add.sprite(flechesPos[0],flechesPos[1],'fleches');
     var flechesAnim = NewObj.Fleches.animations.add('flechesAnim');
     flechesAnim.enableUpdate = true;
-    NewObj.Fleches.animations.play('flechesAnim',5,true);
+    NewObj.Fleches.animations.play('flechesAnim',22,true);
     NewObj.Fleches.anchor.setTo(0.5, 0.5);
+    NewObj.Fleches.scale.setTo(userScale*ourSpriteScale*(5/3));
     NewObj.Fleches.angle = Math.atan2(NewObj.PointSlider.y - NewObj.Object.y, NewObj.PointSlider.x - NewObj.Object.x) * 180 / Math.PI;
-    NewObj.minDistanceFleche = game.cache.getFrameByIndex('fleches',1).width + NewObj.objectWidth/2 + NewObj.pointWidth/2;
+    NewObj.minDistanceFleche = game.cache.getFrameByIndex('fleches',1).width* (userScale*ourSpriteScale*(5/3)) + NewObj.objectWidth/2 + NewObj.pointWidth/2;
     return NewObj;
 }
 
