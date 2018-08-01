@@ -20,6 +20,8 @@ var errors = {
 	},
 
 	printErrorMsg : function(msg){
+		$("#searching").hide();
+		$("#ranked").show();
 		$("#game").hide();
         $("#menu").hide();
         info(msg);

@@ -7,14 +7,15 @@ var gameHandlers = {
 		},
 
 		joinedRoom : function(){
+			info("Game found, transitioning...");
+
+
 			searching = false;
 			$("#menu").hide();
 			$("#inGameLoader").hide();
 			$("#menuTop").hide();
-			info("Game found, transitioning...");
 
 			if(game){
-                console.log("destroying game");
                 game.destroy(true, true);
                 game = null;
                 $("#game").html("");
