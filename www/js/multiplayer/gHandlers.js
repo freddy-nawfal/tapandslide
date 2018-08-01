@@ -30,7 +30,6 @@ var gameHandlers = {
 		            info("You left the game", 3);
 		        });
 		        hideNotification();
-	            $("#ready").css('background','rgba(204, 88, 88, 0.35)');
 	            $("#readyMenu").show();
 	        }, 1000);
 
@@ -42,7 +41,6 @@ var gameHandlers = {
 			hideNotification(true);
 	        $("#game").show();
 	        $("readyMenu").hide();
-			$("#ready").css('background','rgba(204, 88, 88, 0.35)');
 			$('#timer').html("");
 	        launch("ranked", this.level);
 		},
@@ -77,6 +75,19 @@ var gameHandlers = {
 			Level.gameEnded = true;
 			Level.winner = id;
 			retourMenu(5000);
+		},
+
+		stats : function(data){
+			var msg = "";
+			if(data.queue == 1){
+				msg = msg+""+data.queue+" player in the queue."; 
+			}
+			else{
+				msg = msg+""+data.queue+" players in the queue."; 
+			}
+			msg+="<br>";
+			msg = msg+""+data.rooms*2+" players playing."; 
+			info(msg, 3);
 		}
 	},
 
@@ -103,6 +114,10 @@ var gameHandlers = {
 
 		forceLeave : function(){
 			socket.emit("forceLeave");
+		},
+
+		getStats : function(){
+			socket.emit("getStats");
 		}
 	}
 	

@@ -22,6 +22,19 @@ io.on('connection', function(socket){
   		waitingRanked[socket.id] = socket;
   	}
   });
+
+  socket.on("getStats", function(){
+  	var nbQ = 0;
+  	var nbR = 0;
+  	Object.keys(waitingRanked).forEach(function(key1) {
+  		nbQ++;
+  	});
+  	Object.keys(rooms).forEach(function(key1) {
+  		nbR++;
+  	});
+  	socket.emit("stats", {queue: nbQ, rooms: nbR});
+  });
+
   socket.on("abandonSearch", function(){
   	delete waitingRanked[socket.id];
   	console.log(socket.id+" left the matchmaking");
