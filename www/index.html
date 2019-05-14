@@ -22,6 +22,8 @@
                 <a onclick="$(this).hide(); $('#searching').show(); playRanked();" class="menuBtn" id="ranked" href="#">Ranked</a>
                 <a class="menuBtn" style="display: none;" id="searching" onclick="abandonSearch();" href="#">Searching <img src="assets/loader.gif" width="25px"></a>
                 <a onclick="playPractice()" class="menuBtn" href="#">Practice</a>
+                <a onclick="feedback()" class="menuBtn" href="#">Feedback</a>
+                <!--<a onclick="rmAds()" class="menuBtn" href="#" id="rmAds">Remove ads</a>-->
             </div>
 
     	</div>
@@ -53,6 +55,70 @@
 		<script src="js/game.js"></script>
     	<script type="text/javascript">	
 
+            // ========================== Test purchase ==========================
+
+            function loadPurchases(){
+
+                if (!window.store) {
+                    console.error('Store not available');
+                    $("#rmAds").hide();
+                    return;
+                }
+
+                store.register({
+                    id:    'com.freddycorp.tapandslide.no_ads', // id without package name!
+                    alias: 'No Ads',
+                    type:   store.NON_CONSUMABLE
+                });
+
+
+                store.when("com.freddycorp.tapandslide.no_ads").updated(updatePurchases);
+
+                store.when("com.freddycorp.tapandslide.no_ads").approved(function(product) {
+                    updatePurchases();
+                    product.finish();
+                });
+
+                updatePurchases();
+                store.refresh();
+            }
+
+            function updatePurchases(){
+                var product = store.get("com.freddycorp.tapandslide.no_ads");
+
+                if (!product) {
+                    $("#rmAds").html("Remove ads: "+ product.price);
+                }
+                else if (product.state === store.REGISTERED) {
+                    $("#rmAds").html("Loading");
+                }
+                else if (product.state === store.INVALID) {
+                    $("#rmAds").html("Remove ads: "+ product.price);
+                }
+                else {
+                    // Good! Product loaded and valid.
+                    $("#rmAds").html("Remove ads: "+ product.price);
+
+                    // Is this product owned? Give him a special class.
+                    if (product.owned)
+                        $("#rmAds").html("Ads-free");
+                    else
+                        $("#rmAds").html("Remove ads: "+ product.price);
+                }
+            }
+
+            function rmAds(){
+                store.order("com.freddycorp.tapandslide.no_ads");
+            }
+
+
+
+
+            // ===================================================================
+
+
+
+
     		document.addEventListener('deviceready', Startup, false);
             document.addEventListener("backbutton", onBackKeyDown, false);
 
@@ -80,6 +146,8 @@
                 loadGameHandlers();
 
                 $("#logoMenu").attr("src","assets/logo-animate.gif");
+
+                //loadPurchases();
     		}
 
             function waitForConnection(){
@@ -197,6 +265,11 @@
                 }, 1000);
             }
 
+
+
+            function feedback(){
+                window.open('https://goo.gl/forms/51PLBGnjqnd2taUo2', '_system');
+            }
     	</script>
 
         

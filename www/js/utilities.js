@@ -425,7 +425,7 @@ function shuffleArray(a) { //O(n) on se met bien
 }
 
 var player1Bar = new ProgressBar.Circle(player1ProgressBar, {
-  color: '#FFF',
+  color: '#000',
   // This has to be the same size as the maximum width to
   // prevent clipping
   strokeWidth: 30,
@@ -436,7 +436,7 @@ var player1Bar = new ProgressBar.Circle(player1ProgressBar, {
     autoStyleContainer: false
   },
   from: { color: '#0f660f', width: 5 },
-  to: { color: '#11d611', width: 20 },
+  to: { color: '#11d611', width: 5 },
   // Set default step function for all animate calls
   step: function(state, circle) {
     circle.path.setAttribute('stroke', state.color);
@@ -448,7 +448,7 @@ var player1Bar = new ProgressBar.Circle(player1ProgressBar, {
 });
 player1Bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
 var player2Bar = new ProgressBar.Circle(player2ProgressBar, {
-  color: '#FFF',
+  color: '#000',
   // This has to be the same size as the maximum width to
   // prevent clipping
   strokeWidth: 30,
@@ -459,7 +459,7 @@ var player2Bar = new ProgressBar.Circle(player2ProgressBar, {
     autoStyleContainer: false
   },
   from: { color: '#660e0e', width: 5 },
-  to: { color: '#d61121', width: 20 },
+  to: { color: '#d61121', width: 5 },
   // Set default step function for all animate calls
   step: function(state, circle) {
     circle.path.setAttribute('stroke', state.color);
@@ -482,3 +482,4 @@ function retourMenu(time){
     mainMenu();
   },time);
 }
+

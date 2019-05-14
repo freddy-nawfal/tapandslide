@@ -18,9 +18,10 @@ html,body {
 }
 
 body{
-    background-image: url("../assets/bgm.png");
+    /*background-image: url("../assets/bgm.png");*/
     background-size: cover;
     background-position: right;
+    background-color: black;
 }
 
 #game canvas{
@@ -35,7 +36,8 @@ body{
 #menuTop{
 	display: none;
     height: 10vh;
-    box-shadow:0px -2px 0px 0px black inset;
+    border-bottom: 2px solid #f54d4d;
+    background-color: white;
 }
 
 div#menu{
@@ -51,17 +53,17 @@ div#menu{
 }
 
 div#msg{
-    color: white;
+    color: black;
     text-align: center;
     width: 99.5vw;
     padding: 10px 0;
-    border: 1px solid #000000;
+    border: 1px solid black;
     position: absolute;
     bottom: 0;
     left: 0;
     z-index: 3;
     /* border-radius: 5px; */
-    background-color: #16161b3b;
+    background-color: white;
 }
 
 .menuBtn{
@@ -71,7 +73,7 @@ div#msg{
     margin-top: 10px;
     font-family: OrangeJuice;
     font-size: 30px;
-    color: black;
+    color: white;
     transition: .3s;
     background-color: #16161b3b;
     box-shadow: 0px 0px 2px  1px black inset;
@@ -107,7 +109,7 @@ a:active {
     margin-top: 10px;
     font-family: OrangeJuice;
     font-size: 30px;
-    color: black;
+    color: white;
     transition: .3s;
     background-color: #16161b3b;
     box-shadow: 0px 0px 2px  1px black inset;
@@ -116,7 +118,7 @@ a:active {
 #timer{
 	text-align: center;
     padding: 20px;
-    color: black;
+    color: white;
     font-size: 20px;
     font-family: Lato;
     text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #FFF, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;

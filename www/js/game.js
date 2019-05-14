@@ -41,12 +41,13 @@ function launch(mode,level){
 }
 
 function preload() {
-  game.load.image('background', 'assets/background-game.png');
+  //game.load.image('background', 'assets/background-game.png');
   game.load.image('button', 'assets/button-normal.png');
   game.load.image('slider', 'assets/slider-normal.png');
   game.load.image('midSlider', 'assets/mid-slider-normal.png');
   game.load.spritesheet('fleches', 'assets/fleches-anim.png', 600, 300,11);
   game.load.image('spiral','assets/spiral-normal.png');
+
 }
 
 var CurrentObject;
@@ -54,10 +55,11 @@ var MyProgression;
 var EnemyProgression;
 var style = {font: "GillSansUltraBold", fill: "#000000"};
 
+
 function create() {
-  var background = game.add.sprite(window.innerWidth/2,actualHeight/2,'background');
+  /*var background = game.add.sprite(window.innerWidth/2,actualHeight/2,'background');
   background.anchor.setTo(0.5,0.5);
-  background.scale.setTo(window.innerWidth/game.cache.getImage('background').width);
+  background.scale.setTo(window.innerWidth/game.cache.getImage('background').width);*/
 
   game.input.enabled=false;
   $("#beginTimer").html('');
