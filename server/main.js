@@ -298,12 +298,14 @@ function calculateAndSetElo(player1Data, player2Data){
 					
 					if(eloDifferenceWinner > 0){
 						// Winner was advantaged
+						if(eloDifferenceWinner < 1) eloDifferenceWinner = 1;
 
 						eloCalcWinner = progressionDifference * (1/eloDifferenceWinner);
 						eloCalcLoser = progressionDifference * (1/eloDifferenceWinner);
 					}
 					else{
 						// Loser was advantaged
+						if(eloDifferenceWinner < 1) eloDifferenceWinner = 1;
 
 						eloCalcLoser = 5 * progressionDifference * (1/Math.abs(eloDifferenceWinner));
 						eloCalcWinner = progressionDifference * (1/Math.abs(eloDifferenceWinner));
