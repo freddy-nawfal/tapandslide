@@ -80,6 +80,16 @@ div#msg{
     display: block;
 }
 
+.connectbtn{
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+#connectionStatus{
+    font-family: 'Raleway';
+    color: white;
+}
+
 a:link {
     text-decoration: none;
 }

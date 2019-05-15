@@ -41,7 +41,7 @@ io.on('connection', function(socket){
 					// User is valid, connecting him 
 					socket.user = user;
 
-					var toSend = {success: true, id: user._id};
+					var toSend = {success: true, username: user.username};
 					socket.emit("sign_in_info", toSend);
 					console.log(toSend)
 				}
@@ -73,7 +73,7 @@ io.on('connection', function(socket){
 				User.create({username: data.username, password: data.password})
 				.then(function(user){
 					socket.user = user;
-					var toSend = {success: true, id: user._id};
+					var toSend = {success: true, username: user.username};
 					socket.emit("sign_up_info", toSend);
 				})
 			}

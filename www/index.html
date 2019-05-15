@@ -7,6 +7,7 @@
 
         <script src="js/phaser.js"></script>
         <link rel="stylesheet" href="css/main.css" type="text/css">
+        <link rel="stylesheet" href="css/modal.css" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
     </head>
  
@@ -18,12 +19,52 @@
             </div>
              
             <img id="logoMenu" src="assets/logo.png" width="100%">
+            <!-- The Modal -->
+            <div id="signupModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                <span class="close">&times;</span>
+                <form id="signupForm">
+                    <label for="usernameS">
+                        Username: 
+                        <input type="text" id="usernameS" name="usernameS" placeholder="example">
+                    </label>
+                    <label for="passwordS">
+                        Password: 
+                        <input type="password" id="passwordS" name="passwordS" placeholder="******">
+                    </label>
+                    <button type="submit">Sign-up</button>
+                </form>
+                </div>
+            </div>
+            <!-- The Modal -->
+            <div id="connectModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <form id="connectForm">
+                        <label for="username">
+                            Username: 
+                            <input type="text" id="username" name="username" placeholder="example">
+                        </label>
+                        <label for="password">
+                            Password: 
+                            <input type="password" id="password" name="password" placeholder="******">
+                        </label>
+                        <button type="submit">Sign-in</button> <br>
+                    </form>
+                    No account ? <button onclick="hideModal(); showSModal(); return false">Sign-up</button>
+                </div>
+            </div>
+
+
             <div id="buttons">
                 <a onclick="playRanked();" class="menuBtn" id="ranked" href="#">Ranked</a>
                 <a class="menuBtn" style="display: none;" id="searching" onclick="abandonSearch();" href="#">Searching <img src="assets/loader.gif" width="25px"></a>
                 <a onclick="playPractice()" class="menuBtn" href="#">Practice</a>
                 <a onclick="feedback()" class="menuBtn" href="#">Feedback</a>
                 <!--<a onclick="rmAds()" class="menuBtn" href="#" id="rmAds">Remove ads</a>-->
+                <button class="connectbtn" onclick="connect()"><img src="assets/user.png" width="24px"> <span id="connectionStatus">Not connected</span></button>
             </div>
 
     	</div>
@@ -47,6 +88,7 @@
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/socket.io.js"></script>
 		<script type="text/javascript" src="js/notify.js"></script>
+		<script type="text/javascript" src="js/modal.js"></script>
         <script type="text/javascript" src="js/multiplayer/gHandlers.js"></script>
 		<script type="text/javascript" src="js/multiplayer/eHandlers.js"></script>
 		<script type="text/javascript" src="js/multiplayer/cHandlers.js"></script>
@@ -150,6 +192,7 @@
                 $("#logoMenu").attr("src","assets/logo-animate.gif");
 
                 //loadPurchases();
+
     		}
 
             function waitForConnection(){
@@ -157,6 +200,13 @@
                     myID = data;
                     hideNotification(true);
                     $("#menu").show();
+
+                    // Auto connecting user
+                    var username = localStorage.getItem("username");
+                    var password = localStorage.getItem("password");
+                    if(username && password){
+                        connectionHandlers.login({username: username, password: password});
+                    }
                 });
             }
 
@@ -250,6 +300,37 @@
                     launch("practice",level);
                 }, 1000);
             }
+
+            function connect(){
+                showModal();
+            }
+
+            $("#connectForm").submit(function(e){
+                var username = $("#username").val()
+                var password = $("#password").val()
+                connectionHandlers.login({username: username, password: password});
+
+                hideModal();
+                $("#username").val("")
+                $("#password").val("")
+
+                localStorage.setItem("username", username);
+                localStorage.setItem("password", password);
+                e.preventDefault();
+            });
+            $("#signupForm").submit(function(e){
+                var username = $("#usernameS").val()
+                var password = $("#passwordS").val()
+                connectionHandlers.signup({username: username, password: password});
+
+                hideSModal();
+                $("#usernameS").val("")
+                $("#passwordS").val("")
+
+                localStorage.setItem("username", username);
+                localStorage.setItem("password", password);
+                e.preventDefault();
+            });
 
             var timerInterval;
             function startTimer(duration, display, after) {

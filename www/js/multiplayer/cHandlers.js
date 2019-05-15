@@ -1,6 +1,15 @@
+
 var connectionHandlers = {
+    login : function(data){
+        socket.emit("login", data);
+    },
+    signup : function(data){
+        socket.emit("sign_up", data);
+    },
+
     sign_in_info : function(data){
         if(data.success){
+            $("#connectionStatus").html(data.username)
             info("Logged-in successfully !", 2);
         }
         else{
@@ -22,6 +31,7 @@ var connectionHandlers = {
 
     sign_up_info: function(data){
         if(data.success){
+            $("#connectionStatus").html(data.username)
             info("Signed-up in successfully !", 2);
         }
         else{
