@@ -226,12 +226,39 @@ io.on('connection', function(socket){
   
   	// ici frr tu verifie aussi kil a fini wesh
   	if(c1Progression == 100 || c2Progression == 100){
+			var winner;
+			var loser;
   		if(c1Progression == 100){
+				winner = room.clients[0];
+				loser = room.clients[1];
   			io.to(roomID).emit('gameFinished',room.clients[0].id);
   		}
   		else{
+				winner = room.clients[1];
+				loser = room.clients[0];
   			io.to(roomID).emit('gameFinished',room.clients[1].id);
-  		}
+			}
+			if(isConnected(winner)){
+				User.findOne({_id: winner.user._id}, function(err, user){
+					if(user){
+						user.stats.wins++;
+						user.save(function(err, res){
+							console.log("saved winner")
+						})
+					}
+				});
+			}
+			if(isConnected(loser)){
+				User.findOne({_id: loser.user._id}, function(err, user){
+					if(user){
+						user.stats.wins++;
+						user.save(function(err, res){
+							console.log("saved loser")
+						})
+					}
+				});
+			}
+			
 
   		room.clients[0].roomID = null;
   		room.clients[1].roomID = null;
