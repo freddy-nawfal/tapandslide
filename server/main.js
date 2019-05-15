@@ -3,8 +3,18 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var randomstring = require("randomstring");
 
-var Classes = require("./classes.js");
 
+var Classes = require("./classes.js");
+const User = require("./models/user");
+
+const mongoose = require("mongoose");
+mongoose.Promise = require("bluebird");
+
+
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/tapnslide";
+mongoose
+	.connect(mongoUrl, { useNewUrlParser: true })
+	.catch(err => console.error(`Mongoose Error: ${err.stack}`));
 
 var waitingRanked = {};
 var rooms = {};
@@ -14,7 +24,59 @@ io.on('connection', function(socket){
 
 	socket.emit("connected", socket.id);
 
-  
+	// Demande de connexion
+	socket.on("login", function(data){
+		User.findOne({username: data.username}, function(err, user){
+			if(err)throw err;
+			if(user){
+				if(user.validPassword(data.password)){
+					// User is valid, connecting him 
+					socket.user = user;
+
+					var toSend = {success: true, id: user._id};
+					socket.emit("sign_in_info", toSend);
+					console.log(toSend)
+				}
+				else{
+					// invalid password
+					var toSend = {success: false, errorfield: 'password'};
+					socket.emit("sign_in_info", toSend);
+					console.log(toSend)
+				}
+			}
+			else{
+				// User not found
+				var toSend = {success: false, errorfield: 'username'};
+				socket.emit("sign_in_info", toSend);
+				console.log(toSend)
+			}
+		});
+	});
+
+	socket.on("sign_up", function(data){
+		User.find({username: data.username}, function(user){
+			if(user){
+				// User already existing
+				var toSend = {success: false, errorfield: 'username'};
+				socket.emit("sign_up_info", toSend);
+			}
+			else{
+				// Creating user
+				User.create({username: data.username, password: data.password})
+				.then(function(user){
+					socket.user = user;
+					var toSend = {success: true, id: user._id};
+					socket.emit("sign_up_info", toSend);
+				})
+			}
+		})
+	});
+
+	function isConnected(socket){
+		return socket.user ? true : false;
+	}
+	
+	// Rejoindre le matchmaking
   socket.on("search", function(mode){
   	console.log("client: "+socket.id+" searching for "+mode);
   	if(mode == "ranked"){
@@ -23,6 +85,7 @@ io.on('connection', function(socket){
   	}
   });
 
+	// Récupérer le nombre de joueurs en recherche, et en partie
   socket.on("getStats", function(){
   	var nbQ = 0;
   	var nbR = 0;
@@ -35,10 +98,14 @@ io.on('connection', function(socket){
   	socket.emit("stats", {queue: nbQ, rooms: nbR});
   });
 
+
+	// Quitter le matchmaking
   socket.on("abandonSearch", function(){
   	delete waitingRanked[socket.id];
   	console.log(socket.id+" left the matchmaking");
-  });
+	});
+	
+	// Quitter la game
   socket.on("forceLeave", function(){
 	if(socket.roomID){
   		var toS;
@@ -52,18 +119,15 @@ io.on('connection', function(socket){
 	  		rooms[socket.roomID].clients[1].roomID = 0;
 	  		rooms[socket.roomID].clients[0].roomID = 0;
 	  	}
-
-	  	
 	  	io.to(toS).emit('opponentLeft');
 
 	  	delete rooms[socket.roomID];
 	  	delete waitingRanked[socket.id];
 	 }
-	 
-
   });
 
 
+	// Déconnexion du socket
   socket.on('disconnect', function(){
 
   	if(socket.roomID){
@@ -76,20 +140,18 @@ io.on('connection', function(socket){
 	  		toS = rooms[socket.roomID].clients[1].id;
 	  		rooms[socket.roomID].clients[1].roomID = 0;
 	  	}
-
-	  	
 	  	io.to(toS).emit('opponentLeft');
 
 	  	delete rooms[socket.roomID];
-	 }
+	 	}
 
-	if(waitingRanked[socket.id]){
-	  delete waitingRanked[socket.id];
-	  console.log(socket.id+" left the matchmaking");
-	}
-	 
+		if(waitingRanked[socket.id]){
+			delete waitingRanked[socket.id];
+			console.log(socket.id+" left the matchmaking");
+		}
   });
 
+	// Nous avons clické sur "ready"
   socket.on("readyLaunch", function(){
   	var roomID = socket.roomID;
   	var room = rooms[roomID];
@@ -103,6 +165,7 @@ io.on('connection', function(socket){
   	}
   });
 
+	// 
   socket.on('bothTimerGo', function(){
   	var roomID = socket.roomID;
   	var room = rooms[roomID];
@@ -116,6 +179,8 @@ io.on('connection', function(socket){
   	}
   });
 
+
+	// Nous avons fini un élément
   socket.on('elementFinished', function(id){
   	var roomID = socket.roomID;
   	var room = rooms[roomID];
@@ -179,16 +244,22 @@ io.on('connection', function(socket){
 
 });
 
+
+// ============ MATCHMAKING ============
+
+
 // Toutes les 2 secondes on parcours la liste des gens en attente 
 var matchMaker = setInterval(function(){
 	Object.keys(waitingRanked).forEach(function(key1) {
 	    Object.keys(waitingRanked).forEach(function(key2) {
 		    if(key1 != key2){
-		    	// tester les elo points et tout 
 		    	var client1 = waitingRanked[key1];
 		    	var client2 = waitingRanked[key2];
 
 		    	if(client1 && client2){
+						// tester les elo points et tout
+						
+						// Si les 2 joueurs matchent
 		    		delete waitingRanked[key1];
 			    	delete waitingRanked[key2];
 
