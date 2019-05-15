@@ -19,7 +19,7 @@
              
             <img id="logoMenu" src="assets/logo.png" width="100%">
             <div id="buttons">
-                <a onclick="$(this).hide(); $('#searching').show(); playRanked();" class="menuBtn" id="ranked" href="#">Ranked</a>
+                <a onclick="playRanked();" class="menuBtn" id="ranked" href="#">Ranked</a>
                 <a class="menuBtn" style="display: none;" id="searching" onclick="abandonSearch();" href="#">Searching <img src="assets/loader.gif" width="25px"></a>
                 <a onclick="playPractice()" class="menuBtn" href="#">Practice</a>
                 <a onclick="feedback()" class="menuBtn" href="#">Feedback</a>
@@ -49,6 +49,7 @@
 		<script type="text/javascript" src="js/notify.js"></script>
         <script type="text/javascript" src="js/multiplayer/gHandlers.js"></script>
 		<script type="text/javascript" src="js/multiplayer/eHandlers.js"></script>
+		<script type="text/javascript" src="js/multiplayer/cHandlers.js"></script>
         <script type="text/javascript" src="js/progressbar.min.js"></script>
 		<script src="cordova.js"></script>
 		<script type="text/javascript" src="js/utilities.js"></script>
@@ -135,7 +136,7 @@
 
     		function Startup(){
 				// INIT SOCKET
-				socket = io.connect('http://diiiazote.tk:8000');
+				socket = io.connect('http://localhost:8000');
 
                 $("#game").hide();
                 $("#menu").hide();
@@ -144,6 +145,7 @@
 
                 waitForConnection();
                 loadGameHandlers();
+                loadConnectionHandlers();
 
                 $("#logoMenu").attr("src","assets/logo-animate.gif");
 
@@ -181,10 +183,7 @@
             }
 
     		function playRanked(){
-                searching = true;
-
     			gameHandlers.out.search("ranked");
-                gameHandlers.out.getStats();
     		}
             function abandonSearch(){
                 info("You left the matchmaking", 2);
@@ -211,6 +210,7 @@
                 socket.on('gameGo', gameHandlers.in.gameGo);
                 socket.on('gameFinished', gameHandlers.in.gameFinished);
                 socket.on('stats', gameHandlers.in.stats);
+                socket.on('search', gameHandlers.in.search);
     		}
             function loadErrorHandlers(){
                 socket.on('connect_error', errors.connect_error);
@@ -219,6 +219,11 @@
                 socket.on('reconnect_error', errors.reconnect_error);
                 socket.on('reconnect_failed', errors.reconnect_failed);
                 socket.on('reconnect', errors.reconnect);
+            }
+            function loadConnectionHandlers(){
+                socket.on("sign_in_info", connectionHandlers.sign_in_info);
+                socket.on("sign_up_info", connectionHandlers.sign_up_info);
+                socket.on("not_logged_in", connectionHandlers.not_logged_in);
             }
 
             function playPractice(){

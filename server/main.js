@@ -20,6 +20,14 @@ var waitingRanked = {};
 var rooms = {};
 
 
+function isConnected(socket){
+	return socket.user ? true : false;
+}
+
+function sendNotLoggedIn(socket){
+	io.to(socket.id).emit("not_logged_in");
+}
+
 io.on('connection', function(socket){
 
 	socket.emit("connected", socket.id);
@@ -72,18 +80,22 @@ io.on('connection', function(socket){
 		})
 	});
 
-	function isConnected(socket){
-		return socket.user ? true : false;
-	}
 	
 	// Rejoindre le matchmaking
   socket.on("search", function(mode){
-  	console.log("client: "+socket.id+" searching for "+mode);
-  	if(mode == "ranked"){
-  		socket.attempts = 0;
-  		waitingRanked[socket.id] = socket;
-  	}
-  });
+		if(isConnected(socket)){
+			socket.emit("search");
+			console.log("client: "+socket.id+" searching for "+mode);
+			if(mode == "ranked"){
+				socket.attempts = 0;
+				waitingRanked[socket.id] = socket;
+			}
+		}
+		else{
+			sendNotLoggedIn(socket);	
+		}
+	});
+	
 
 	// Récupérer le nombre de joueurs en recherche, et en partie
   socket.on("getStats", function(){

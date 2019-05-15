@@ -89,6 +89,13 @@ var gameHandlers = {
 			msg+="<br>";
 			msg = msg+""+data.rooms*2+" players playing."; 
 			info(msg, 3);
+		},
+
+		search: function(){
+			$("#ranked").hide(); 
+			$('#searching').show(); 
+			searching = true;
+			gameHandlers.out.getStats();
 		}
 	},
 
