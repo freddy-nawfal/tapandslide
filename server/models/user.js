@@ -28,7 +28,7 @@ const UserSchema = new Schema({
     },
     elo: {
       type: Number,
-      default: 0
+      default: 1
     }
   }
 

@@ -43,20 +43,17 @@ io.on('connection', function(socket){
 
 					var toSend = {success: true, username: user.username};
 					socket.emit("sign_in_info", toSend);
-					console.log(toSend)
 				}
 				else{
 					// invalid password
 					var toSend = {success: false, errorfield: 'password'};
 					socket.emit("sign_in_info", toSend);
-					console.log(toSend)
 				}
 			}
 			else{
 				// User not found
 				var toSend = {success: false, errorfield: 'username'};
 				socket.emit("sign_in_info", toSend);
-				console.log(toSend)
 			}
 		});
 	});
@@ -235,42 +232,27 @@ io.on('connection', function(socket){
   	io.to(roomID).emit("progressionInfo", toSend);
 
 
-  
+	
+		
   	// ici frr tu verifie aussi kil a fini wesh
   	if(c1Progression == 100 || c2Progression == 100){
-			var winner;
-			var loser;
-  		if(c1Progression == 100){
-				winner = room.clients[0];
-				loser = room.clients[1];
-  			io.to(roomID).emit('gameFinished',room.clients[0].id);
-  		}
-  		else{
-				winner = room.clients[1];
-				loser = room.clients[0];
-  			io.to(roomID).emit('gameFinished',room.clients[1].id);
+			var player1Data = {
+				player: room.clients[0],
+				progression: c1Progression
+			};
+
+			var player2Data = {
+				player: room.clients[1],
+				progression: c2Progression
+			};
+			calculateAndSetElo(player1Data, player2Data);
+
+			if(c1Progression == 100){
+				io.to(roomID).emit('gameFinished',room.clients[0].id);
 			}
-			if(isConnected(winner)){
-				User.findOne({_id: winner.user._id}, function(err, user){
-					if(user){
-						user.stats.wins++;
-						user.save(function(err, res){
-							console.log("saved winner")
-						})
-					}
-				});
+			else{
+				io.to(roomID).emit('gameFinished',room.clients[1].id);
 			}
-			if(isConnected(loser)){
-				User.findOne({_id: loser.user._id}, function(err, user){
-					if(user){
-						user.stats.wins++;
-						user.save(function(err, res){
-							console.log("saved loser")
-						})
-					}
-				});
-			}
-			
 
   		room.clients[0].roomID = null;
   		room.clients[1].roomID = null;
@@ -282,6 +264,68 @@ io.on('connection', function(socket){
 
 
 });
+
+
+function calculateAndSetElo(player1Data, player2Data){
+	var winner;
+	var loser;
+	
+
+	if(player1Data.progression == 100){
+		winner = player1Data.player;
+		loser = player2Data.player;
+	}
+	else{
+		winner = player2Data.player;
+		loser = player1Data.player;
+	}
+
+	if(isConnected(winner) && isConnected(loser)){
+		User.findOne({_id: winner.user._id}, function(err, WINNER){
+			User.findOne({_id: loser.user._id}, function(err, LOSER){
+				if(WINNER && LOSER){
+					
+					var progressionDifference = Math.abs(player1Data.progression - player2Data.progression);
+					console.log("Progression difference: "+progressionDifference);
+
+					console.log("Winner elo: "+WINNER.stats.elo);
+					console.log("Loser elo: "+LOSER.stats.elo);
+
+					var eloDifferenceWinner = WINNER.stats.elo - LOSER.stats.elo;
+
+					var eloCalcWinner;
+					var eloCalcLoser;
+					
+					if(eloDifferenceWinner > 0){
+						// Winner was advantaged
+
+						eloCalcWinner = progressionDifference * (1/eloDifferenceWinner);
+						eloCalcLoser = progressionDifference * (1/eloDifferenceWinner);
+					}
+					else{
+						// Loser was advantaged
+
+						eloCalcLoser = 5 * progressionDifference * (1/Math.abs(eloDifferenceWinner));
+						eloCalcWinner = progressionDifference * (1/Math.abs(eloDifferenceWinner));
+					}
+
+					console.log("Elo Calc Winner: "+ eloCalcWinner);
+					console.log("Elo Calc Loser: "+ eloCalcLoser);
+
+					WINNER.stats.elo += eloCalcWinner; 
+					LOSER.stats.elo -= eloCalcLoser; 
+
+					if(WINNER.stats.elo < 1) WINNER.stats.elo = 1;
+					if(LOSER.stats.elo < 1) LOSER.stats.elo = 1;
+
+					WINNER.save(function(e, w){});
+					LOSER.save(function(e, w){});
+
+				}
+			});
+		});
+	}
+}
 
 
 // ============ MATCHMAKING ============
