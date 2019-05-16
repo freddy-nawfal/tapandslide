@@ -18,6 +18,7 @@ mongoose
 
 var waitingRanked = {};
 var rooms = {};
+var sockets_connected = {};
 
 
 function isConnected(socket){
@@ -31,6 +32,7 @@ function sendNotLoggedIn(socket){
 io.on('connection', function(socket){
 
 	socket.emit("connected", socket.id);
+	sockets_connected[socket.id] = socket;
 
 	// Demande de connexion
 	socket.on("login", function(data){
@@ -40,6 +42,7 @@ io.on('connection', function(socket){
 				if(user.validPassword(data.password)){
 					// User is valid, connecting him 
 					socket.user = user;
+					sockets_connected[socket.id].user = user;
 
 					var toSend = {success: true, username: user.username};
 					socket.emit("sign_in_info", toSend);
@@ -70,6 +73,7 @@ io.on('connection', function(socket){
 				User.create({username: data.username, password: data.password})
 				.then(function(user){
 					socket.user = user;
+					sockets_connected[socket.id].user = user;
 					var toSend = {success: true, username: user.username};
 					socket.emit("sign_up_info", toSend);
 				})
@@ -158,6 +162,8 @@ io.on('connection', function(socket){
 			delete waitingRanked[socket.id];
 			console.log(socket.id+" left the matchmaking");
 		}
+
+		delete sockets_connected[socket.id];
   });
 
 	// Nous avons clické sur "ready"
@@ -285,7 +291,7 @@ function calculateAndSetElo(player1Data, player2Data){
 			User.findOne({_id: loser.user._id}, function(err, LOSER){
 				if(WINNER && LOSER){
 					
-					var progressionDifference = Math.abs(player1Data.progression - player2Data.progression);
+					var progressionDifference = (Math.abs(player1Data.progression - player2Data.progression))/100;
 					console.log("Progression difference: "+progressionDifference);
 
 					console.log("Winner elo: "+WINNER.stats.elo);
@@ -307,8 +313,8 @@ function calculateAndSetElo(player1Data, player2Data){
 						// Loser was advantaged
 						if(eloDifferenceWinner < 1) eloDifferenceWinner = 1;
 
-						eloCalcLoser = 5 * progressionDifference * (1/Math.abs(eloDifferenceWinner));
-						eloCalcWinner = progressionDifference * (1/Math.abs(eloDifferenceWinner));
+						eloCalcLoser = 10 * progressionDifference * (1/Math.abs(eloDifferenceWinner));
+						eloCalcWinner = 10 * progressionDifference * (1/Math.abs(eloDifferenceWinner));
 					}
 
 					console.log("Elo Calc Winner: "+ eloCalcWinner);
@@ -319,6 +325,9 @@ function calculateAndSetElo(player1Data, player2Data){
 
 					if(WINNER.stats.elo < 1) WINNER.stats.elo = 1;
 					if(LOSER.stats.elo < 1) LOSER.stats.elo = 1;
+
+					sockets_connected[winner.id].user.stats.elo = WINNER.stats.elo;
+					sockets_connected[loser.id].user.stats.elo = LOSER.stats.elo;
 
 					WINNER.save(function(e, w){});
 					LOSER.save(function(e, w){});
@@ -343,23 +352,42 @@ var matchMaker = setInterval(function(){
 
 		    	if(client1 && client2){
 						// tester les elo points et tout
-						
-						// Si les 2 joueurs matchent
-		    		delete waitingRanked[key1];
-			    	delete waitingRanked[key2];
+						var mineloClient1 = client1.user.stats.elo - (client1.attempts * 10);
+						var maxeloClient1 = client1.user.stats.elo + (client1.attempts * 10);
 
-			    	var roomID = randomstring.generate(7);
-			    	rooms[roomID] = {
-			    		clients: [client1, client2], 
-			    		level: null,
-			    		client1Tab : {counter: 0},
-			    		client2Tab : {counter: 0}
-			    	};
+						var mineloClient2 = client2.user.stats.elo - (client2.attempts * 10);
+						var maxeloClient2 = client2.user.stats.elo + (client2.attempts * 10);
 
-			    	generateRoom(roomID);
+						if(mineloClient1 < 1) mineloClient1 = 1;
+						if(mineloClient2 < 1) mineloClient2 = 1;
 
-			    	client1.roomID = roomID;
-			    	client2.roomID = roomID;
+						console.log(client1.user.username+" - ("+mineloClient1+", "+maxeloClient1+")");
+						console.log(client2.user.username+" - ("+mineloClient2+", "+maxeloClient2+")");
+
+						if(mineloClient1>=mineloClient2 && mineloClient1<=maxeloClient2 ||
+							 maxeloClient1<=maxeloClient2 && maxeloClient1>=mineloClient2 ||
+							 maxeloClient2<=maxeloClient1 && maxeloClient2>=mineloClient1 ||
+							 mineloClient2>=mineloClient1 && mineloClient2<=maxeloClient1){
+							// Ils matchent
+							delete waitingRanked[key1];
+							delete waitingRanked[key2];
+
+							var roomID = randomstring.generate(7);
+							rooms[roomID] = {
+								clients: [client1, client2], 
+								level: null,
+								client1Tab : {counter: 0},
+								client2Tab : {counter: 0}
+							};
+
+							generateRoom(roomID);
+
+							client1.roomID = roomID;
+							client2.roomID = roomID;
+						}
+						else{
+							client1.attempts++;
+						}
 		    	}
 		    }
 		});
@@ -383,7 +411,8 @@ function generateRoom(roomID) {
 }
 
 function generateLevel(roomID){
-	var numberOfElementsInLevel = Math.floor(Math.random() * 60) + 30;
+	//var numberOfElementsInLevel = Math.floor(Math.random() * 60) + 30;
+	var numberOfElementsInLevel = 10;
 	rooms[roomID].level = new Classes.level(numberOfElementsInLevel);
 	var tab = rooms[roomID].level.getElements();
 	for (var i = 0; i < tab.length; i++) {
