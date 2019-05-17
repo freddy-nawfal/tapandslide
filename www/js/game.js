@@ -47,19 +47,34 @@ function preload() {
   game.load.image('midSlider', 'assets/mid-slider-normal.png');
   game.load.spritesheet('fleches', 'assets/fleches-anim.png', 600, 300,11);
   game.load.image('spiral','assets/spiral-normal.png');
-
+  game.load.image('particleButton','assets/particleButton.png');
+  game.load.image('particleSlider','assets/particleSlider.png');
 }
 
 var CurrentObject;
 var MyProgression;
 var EnemyProgression;
 var style = {font: "Lato", fill: "#000000"};
-
+var emitterButton; var emitterSlider;
 
 function create() {
   /*var background = game.add.sprite(window.innerWidth/2,actualHeight/2,'background');
   background.anchor.setTo(0.5,0.5);
   background.scale.setTo(window.innerWidth/game.cache.getImage('background').width);*/
+  emitterButton = game.add.emitter(0,0,500);
+  emitterButton.makeParticles('particleButton');
+  emitterButton.gravity = 0;
+  emitterButton.minParticleSpeed = new Phaser.Point(-150, -150);
+  emitterButton.maxParticleSpeed = new Phaser.Point(150, 150);
+  emitterButton.setAlpha(0.3, 0.8);
+  emitterButton.setScale(0.6, 1);
+  emitterSlider = game.add.emitter(0,0,500);
+  emitterSlider.makeParticles('particleSlider');
+  emitterSlider.gravity = 0;
+  emitterSlider.minParticleSpeed = new Phaser.Point(-150, -150);
+  emitterSlider.maxParticleSpeed = new Phaser.Point(150, 150);
+  emitterSlider.setAlpha(0.3, 0.8);
+  emitterSlider.setScale(0.6, 1);
 
   game.input.enabled=false;
   $("#beginTimer").html('');
@@ -114,8 +129,9 @@ function update() {
     else if(Level.mode == "practice"){
 
     }
-
   }
+  emitterButton.forEachAlive(function(p){   p.alpha= p.lifespan / emitterButton.lifespan; });
+  emitterSlider.forEachAlive(function(p){   p.alpha= p.lifespan / emitterSlider.lifespan; });
 }
 
 function updateLevel(mode){
@@ -128,6 +144,7 @@ function updateLevel(mode){
       else {
         CurrentObject = checkCurrentComplete(CurrentObject);
         if(CurrentObject.Completed==true) {
+          particleEmit(CurrentObject);
           Level.currentCompleted = true;
           Level.elementIndex++;
           if(mode == "ranked") updateRanked();
