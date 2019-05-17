@@ -17,13 +17,6 @@ html,body {
   height: 100%;
 }
 
-body{
-    /*background-image: url("../assets/bgm.png");*/
-    background-size: cover;
-    background-position: right;
-    background-color: black;
-}
-
 #game canvas{
 	z-index: 2;
 }
@@ -41,14 +34,14 @@ body{
 }
 
 div#menu{
+    position: absolute;
     color: white;
     text-align: center;
-    margin: auto;
     width: 70%;
     height: 20%;
     top: 0;
     bottom: 0;
-    left: 0;
+    left: 15%;
     right: 0;
 }
 

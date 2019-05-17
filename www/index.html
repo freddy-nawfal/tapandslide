@@ -8,16 +8,27 @@
         <script src="js/phaser.js"></script>
         <link rel="stylesheet" href="css/main.css" type="text/css">
         <link rel="stylesheet" href="css/modal.css" type="text/css">
+        <link rel="stylesheet" href="css/background.css" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
     </head>
  
     <body ng-app="main">
-    	<div id="menu" style="display: none;">
-
+        <div class="lines">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+        <div class="area-background" >
+            <ul class="circles"><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+            </ul>
+        </div >
+    	<div id="menu">
             <div style="text-align: right;">
                 <div id="p1" style="font-size: 2px; position: absolute; z-index: 3; display:inline-block;"></div>
             </div>
-             
+            
             <img id="logoMenu" src="assets/logo.png" width="100%">
             <!-- The Modal -->
             <div id="signupModal" class="modal">
