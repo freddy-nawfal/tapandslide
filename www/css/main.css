@@ -39,7 +39,7 @@ div#menu{
     text-align: center;
     width: 70%;
     height: 20%;
-    top: 0;
+    top: 10%;
     bottom: 0;
     left: 15%;
     right: 0;
@@ -56,7 +56,6 @@ div#msg{
     left: 0;
     z-index: 3;
     /* border-radius: 5px; */
-    background-color: white;
 }
 
 .menuBtn{

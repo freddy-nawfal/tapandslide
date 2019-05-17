@@ -29,7 +29,8 @@
                 <div id="p1" style="font-size: 2px; position: absolute; z-index: 3; display:inline-block;"></div>
             </div>
             
-            <img id="logoMenu" src="assets/logo.png" width="100%">
+            <object type="image/svg+xml" data="assets/logo.svg" width="100%">
+            </object>
             <!-- The Modal -->
             <div id="signupModal" class="modal">
                 <!-- Modal content -->
@@ -79,22 +80,24 @@
             </div>
 
     	</div>
-        <div id="readyMenu" style="display: none;">
-            <button onclick="isReady();" id="ready">Ready</button>
-            <div id="timer"></div>
+        <div id="gameWindow" style="position: absolute; top: 0; left: 0;">
+            <div id="readyMenu" style="display: none;">
+                <button onclick="isReady();" id="ready">Ready</button>
+                <div id="timer"></div>
+            </div>
+
+            <div id="inGameLoader" style="display: none;"><img src="assets/loader.gif" width="20px"></div>
+
+            <div id="menuTop" >
+                <div id="player1ProgressBar"></div>
+                <div id="player2ProgressBar"></div>
+                <div id="beginTimer"></div>
+            </div>
+
+    		<div id="game" style="height: 90vh; position: relative;"></div>
+
         </div>
-    	<div id="msg" style="display: none"></div>
-
-        <div id="inGameLoader" style="display: none;"><img src="assets/loader.gif" width="20px"></div>
-
-        <div id="menuTop" >
-            <div id="player1ProgressBar"></div>
-            <div id="player2ProgressBar"></div>
-            <div id="beginTimer"></div>
-        </div>
-
-		<div id="game" style="height: 90vh; position: relative;"></div>
-
+        <div id="msg" style="display: none"></div>
 
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/socket.io.js"></script>

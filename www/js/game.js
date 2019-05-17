@@ -36,7 +36,7 @@ function launch(mode,level){
   else if(mode=="ranked"){
     $('#player2ProgressBar').show();
   }
-  game = new Phaser.Game(window.innerWidth, actualHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update });
+  game = new Phaser.Game(window.innerWidth, actualHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update },true);
   userScale = window.innerWidth/widthReference;
 }
 
@@ -53,7 +53,7 @@ function preload() {
 var CurrentObject;
 var MyProgression;
 var EnemyProgression;
-var style = {font: "GillSansUltraBold", fill: "#000000"};
+var style = {font: "Lato", fill: "#000000"};
 
 
 function create() {
