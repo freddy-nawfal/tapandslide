@@ -42,6 +42,7 @@ function generateSlider(pos){
   var NewObj = {
       Type: TypeObject.SLIDER,
       Object: null,
+      PreviousPos:null,
       Completed: false,
       PointSlider: null,
       SliderMidPoint: false,
@@ -65,6 +66,10 @@ function generateSlider(pos){
     NewObj.Object.input.pixelPerfectClick = true;
     NewObj.Object.anchor.setTo(0.5, 0.5);
     NewObj.Object.scale.setTo(userScale*ourSpriteScale);
+    NewObj.PreviousPos = {
+      x: x,
+      y: y
+    };
 
     //point
     x = (pos.slider.middle.x / 100) * window.innerWidth;
@@ -185,7 +190,7 @@ function checkSlider(obj){
   }
 
   // GERE LE POINT SLIDER
-  if(checkOverlap(obj.Object,obj.PointSlider) && checkSliderDistance(obj)){
+  if(checkOverlapSlider(obj)){
     if(!obj.SliderMidPoint){ // slider - mid point - changement pos du pointSLider vers end point
       obj.SliderMidPoint = true;
       obj.PointSlider.x = obj.endPos.endX;
@@ -202,6 +207,11 @@ function checkSlider(obj){
       obj.Fleches.destroy();
     }
   }
+
+  // on refresh la previous pos du slider
+  obj.PreviousPos.x = obj.Object.x;
+  obj.PreviousPos.y = obj.Object.y;
+
   return obj;
 }
 
@@ -322,15 +332,28 @@ function checkCurrentComplete(obj) { //fonction qui check l'état courant de not
   return newObj;
 }
 
-function checkOverlap(spriteA, spriteB) { //Verifie l'overlap entre 2 sprite (box2d quoi)
-    var boundsA = spriteA.getBounds();
-    var boundsB = spriteB.getBounds();
+function checkOverlapSlider(obj) {
+    var boundsA = obj.Object.getBounds(); // slider
+    var boundsB = obj.PointSlider.getBounds(); // target point
+    var spriteOverlap = Phaser.Rectangle.intersects(boundsA, boundsB);
+    // si pas de collision alors si la distance parcouru par le slide depuis le dernier dt
+    // permet pas l'overlap certain (checkSliderDistance is false) alors on check si overlap
+    // à la moitié de la trajectoire (lineaire),
+    // évite que si l'on bouge slide trop vite, le sprite passe au dessus de la target
+    if(!spriteOverlap && !checkSliderDistance(obj)){
+      var middlePointXY = getMiddle(obj.Object.x,obj.Object.y,obj.PreviousPos.x,obj.PreviousPos.y);
+      boundsA.x = middlePointXY[0];
+      boundsA.y = middlePointXY[1];
+      spriteOverlap = Phaser.Rectangle.intersects(boundsA, boundsB);
+    }
 
-    return Phaser.Rectangle.intersects(boundsA, boundsB);
+    return spriteOverlap;
 }
 
-function checkSliderDistance(obj){ //Verifie la distance entre le slider et le point pour la collision (utilisation de cercle)
-  var distance = getDistance(obj.Object.x,obj.Object.y,obj.PointSlider.x,obj.PointSlider.y);
+function checkSliderDistance(obj){ //check la distance entre pos actuel et la previous,
+  // true si < largeur slider + largeur mid point   OoO   , false    O  o  O
+  // si false alors la distance parcouru peut empêcher la collision
+  var distance = getDistance(obj.Object.x,obj.Object.y,obj.PreviousPos.x,obj.PreviousPos.y);
   if(distance <= obj.objectWidth+obj.pointWidth) return true;
   return false;
 }
