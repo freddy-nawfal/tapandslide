@@ -449,10 +449,12 @@ function shuffleArray(a) { //O(n) on se met bien
 
 var player1Bar = new ProgressBar.Circle(player1ProgressBar, {
   color: '#000',
+  background: '#00000045',
   // This has to be the same size as the maximum width to
   // prevent clipping
   strokeWidth: 30,
   trailWidth: 5,
+  trailColor: '#00000045',
   easing: 'easeInOut',
   duration: 1400,
   text: {
@@ -476,6 +478,7 @@ var player2Bar = new ProgressBar.Circle(player2ProgressBar, {
   // prevent clipping
   strokeWidth: 30,
   trailWidth: 5,
+  trailColor: '#00000045',
   easing: 'easeInOut',
   duration: 1400,
   text: {
