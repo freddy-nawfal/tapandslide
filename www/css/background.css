@@ -4,8 +4,8 @@
 }
 html,body {
   color: #fff;
-  background: :linear-gradient(-45deg, #c0e4ff, #e6faff, #ffeeee);
-  background-size: 200% 200%;
+  background: linear-gradient(-45deg, #c0e4ff, #d6f5fd, #fbe4e4);
+  background-size: 400% 400%;
   -webkit-animation: Gradient 30s ease infinite;
   -moz-animation: Gradient 30s ease infinite;
   animation: Gradient 30s ease infinite;
@@ -16,7 +16,7 @@ html,body {
     background-position: 0% 0%;
   }
   50% {
-    background-position: 100% 100%;
+    background-position: 50% 50%;
   }
   100% {
     background-position: 0% 0%;
@@ -28,7 +28,7 @@ html,body {
     background-position: 0% 0%;
   }
   50% {
-    background-position: 100% 100%;
+    background-position: 50% 50%;
   }
   100% {
     background-position: 0% 0%;
@@ -40,7 +40,7 @@ html,body {
     background-position: 0% 0%;
   }
   50% {
-    background-position: 100% 100%;
+    background-position: 50% 50%;
   }
   100% {
     background-position: 0% 0%;
@@ -67,7 +67,7 @@ html,body {
   list-style: none;
   width: 20px;
   height: 20px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.45);
   animation: animate 25s linear infinite;
   bottom: -150px;
     

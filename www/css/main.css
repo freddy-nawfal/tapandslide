@@ -17,6 +17,23 @@ html,body {
   height: 100%;
 }
 
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+    box-shadow: none;
+}
+
+a:active {
+    text-decoration: none;
+}
+
 #game canvas{
 	z-index: 2;
 }
@@ -58,45 +75,41 @@ div#msg{
     /* border-radius: 5px; */
 }
 
+#buttons{
+    display: flex;
+    flex-direction: column;
+}
+
 .menuBtn{
-	width: 100%;
+    justify-content: center;
+    align-self: center;
+    width: fit-content;
     border-radius: 5px;
     padding: 8px;
     margin-top: 10px;
-    font-family: OrangeJuice;
+    font-family: Raleway;
     font-size: 30px;
-    color: white;
+    color: #4dc3dc;
     transition: .3s;
-    background-color: #16161b3b;
-    box-shadow: 0px 0px 2px  1px black inset;
+    background-color: #ffffff00;
     display: block;
+}
+
+.menuBtn:active{
+    color: #e24040;
 }
 
 .connectbtn{
     background-color: transparent;
     border: none;
     outline: none;
+    margin-top: 10px;
+    text-align: center;
+    align-content: center;
 }
 #connectionStatus{
     font-family: 'Raleway';
-    color: white;
-}
-
-a:link {
-    text-decoration: none;
-}
-
-a:visited {
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: none;
-    box-shadow: none;
-}
-
-a:active {
-    text-decoration: none;
+    color: black;
 }
 
 #buttons{
