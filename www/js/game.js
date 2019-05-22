@@ -64,15 +64,15 @@ function create() {
   emitterButton = game.add.emitter(0,0,500);
   emitterButton.makeParticles('particleButton');
   emitterButton.gravity = 0;
-  emitterButton.minParticleSpeed = new Phaser.Point(-150, -150);
-  emitterButton.maxParticleSpeed = new Phaser.Point(150, 150);
+  emitterButton.minParticleSpeed = new Phaser.Point(-250, -250);
+  emitterButton.maxParticleSpeed = new Phaser.Point(250, 250);
   emitterButton.setAlpha(0.3, 0.8);
   emitterButton.setScale(0.6, 1);
   emitterSlider = game.add.emitter(0,0,500);
   emitterSlider.makeParticles('particleSlider');
   emitterSlider.gravity = 0;
-  emitterSlider.minParticleSpeed = new Phaser.Point(-150, -150);
-  emitterSlider.maxParticleSpeed = new Phaser.Point(150, 150);
+  emitterSlider.minParticleSpeed = new Phaser.Point(-250, -250);
+  emitterSlider.maxParticleSpeed = new Phaser.Point(250, 250);
   emitterSlider.setAlpha(0.3, 0.8);
   emitterSlider.setScale(0.6, 1);
 

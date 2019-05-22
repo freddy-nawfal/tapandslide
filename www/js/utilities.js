@@ -515,12 +515,12 @@ function particleEmit(obj) {
   if(obj.Type == TypeObject.BUTTON){
     emitterButton.x = obj.Object.x;
     emitterButton.y = obj.Object.y;
-    emitterButton.start(true, 3000,null,20);
+    emitterButton.start(true, 1000,null,20);
   }
   else if(obj.Type == TypeObject.SLIDER){
     emitterSlider.x = obj.Object.x;
     emitterSlider.y = obj.Object.y;
-    emitterSlider.start(true, 3000,null,20);
+    emitterSlider.start(true, 1000,null,20);
   }
     
 }
