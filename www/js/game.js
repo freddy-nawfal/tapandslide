@@ -49,32 +49,20 @@ function preload() {
   game.load.image('spiral','assets/spiral-normal.png');
   game.load.image('particleButton','assets/particleButton.png');
   game.load.image('particleSlider','assets/particleSlider.png');
+  game.load.image('particleSpiral','assets/particleSpiral.png');
 }
 
 var CurrentObject;
 var MyProgression;
 var EnemyProgression;
 var style = {font: "Lato", fill: "#000000"};
-var emitterButton; var emitterSlider;
+var emitterButton; var emitterSlider; var emitterSpiral; var emitterFinish;
 
 function create() {
   /*var background = game.add.sprite(window.innerWidth/2,actualHeight/2,'background');
   background.anchor.setTo(0.5,0.5);
   background.scale.setTo(window.innerWidth/game.cache.getImage('background').width);*/
-  emitterButton = game.add.emitter(0,0,500);
-  emitterButton.makeParticles('particleButton');
-  emitterButton.gravity = 0;
-  emitterButton.minParticleSpeed = new Phaser.Point(-250, -250);
-  emitterButton.maxParticleSpeed = new Phaser.Point(250, 250);
-  emitterButton.setAlpha(0.3, 0.8);
-  emitterButton.setScale(0.6, 1);
-  emitterSlider = game.add.emitter(0,0,500);
-  emitterSlider.makeParticles('particleSlider');
-  emitterSlider.gravity = 0;
-  emitterSlider.minParticleSpeed = new Phaser.Point(-250, -250);
-  emitterSlider.maxParticleSpeed = new Phaser.Point(250, 250);
-  emitterSlider.setAlpha(0.3, 0.8);
-  emitterSlider.setScale(0.6, 1);
+  createEmitters();
 
   game.input.enabled=false;
   $("#beginTimer").html('');
@@ -103,7 +91,6 @@ function update() {
       //fin de la partie si on rentre ici
       if(Level.mode == "ranked"){
         //on envoie au serveur le gagnant etc...
-
         if(Level.elementIndex >= Level.levelElements.length && Level.winner == myID){
           var text = game.add.text(window.innerWidth/2,actualHeight/2,"WINNER", style);
           text.anchor.setTo(0.5,0.5);
@@ -116,11 +103,12 @@ function update() {
         }
       }
       else if(Level.mode == "practice"){
-        //on sauvegarde localement si meilleur resultat
         var text = game.add.text(window.innerWidth/2,actualHeight/2,"FINISH", style);
         text.anchor.setTo(0.5,0.5);
         text.fontSize = 50;
       }
+      emitEndParticle();
+      emitterFinish.forEachAlive(function(p){   p.alpha= p.lifespan / emitterFinish.lifespan; });
     }
     // ici parti pas encore fini, pour les trucs autre
     if(Level.mode == "ranked"){
@@ -129,9 +117,10 @@ function update() {
     else if(Level.mode == "practice"){
 
     }
+    emitterButton.forEachAlive(function(p){   p.alpha= p.lifespan / emitterButton.lifespan; });
+    emitterSlider.forEachAlive(function(p){   p.alpha= p.lifespan / emitterSlider.lifespan; });
+    emitterSpiral.forEachAlive(function(p){   p.alpha= p.lifespan / emitterSpiral.lifespan; });
   }
-  emitterButton.forEachAlive(function(p){   p.alpha= p.lifespan / emitterButton.lifespan; });
-  emitterSlider.forEachAlive(function(p){   p.alpha= p.lifespan / emitterSlider.lifespan; });
 }
 
 function updateLevel(mode){

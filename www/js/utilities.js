@@ -98,7 +98,7 @@ function generateSlider(pos){
     NewObj.Fleches = game.add.sprite(flechesPos[0],flechesPos[1],'fleches');
     var flechesAnim = NewObj.Fleches.animations.add('flechesAnim');
     flechesAnim.enableUpdate = true;
-    NewObj.Fleches.animations.play('flechesAnim',22,true);
+    NewObj.Fleches.animations.play('flechesAnim',33,true);
     NewObj.Fleches.anchor.setTo(0.5, 0.5);
     NewObj.Fleches.scale.setTo(userScale*ourSpriteScale*(5/3));
     NewObj.Fleches.angle = Math.atan2(NewObj.PointSlider.y - NewObj.Object.y, NewObj.PointSlider.x - NewObj.Object.x) * 180 / Math.PI;
@@ -116,6 +116,7 @@ function generateSpiral(){
       spiralScoreMax: 360*4,
       spiralScaleMin:4 * (userScale*ourSpriteScale),
       spiralScaleMax:9 * (userScale*ourSpriteScale),
+      defaultRadius: (game.cache.getImage('spiral').width/2),
       spiralSide:null,
       spiralDistance: null,
       previousPointerAngle:null,
@@ -222,6 +223,10 @@ function checkSpiral(obj){
   obj.spiralDistance = obj.Object.scale.x*20;
   //si il clique et qu'il est pas dans la safe zone
   if(obj.isClicked && getDistance(obj.Object.x,obj.Object.y,game.input.activePointer.x,game.input.activePointer.y)>obj.spiralDistance){
+
+    updateEmitterSpiral(obj,pointerAngle);
+
+
     //on initialise le previousPointer si ce n'est pas fait
     if(obj.previousPointerAngle == null)
       obj.previousPointerAngle = pointerAngle;
@@ -239,7 +244,7 @@ function checkSpiral(obj){
       //ICI TEST DE LA DIFF DES ANGLES PREV ET ACTUEL
       if(obj.spiralScore>0){
         var diffAngle = Math.abs(obj.previousPointerAngle-pointerAngle);
-        if(obj.spiralSide==Side.RIGHT){//vers la droite
+        if(obj.spiralSide==Side.RIGHT){// VERS LA DROITE
           if(obj.previousPointerAngle < pointerAngle){
             if(diffAngle>180){ //gère la rotation et les tricheurs xD
               //droite tourne mauvais sens passage de 0 a 360
@@ -261,7 +266,7 @@ function checkSpiral(obj){
             }
           }
         }
-        else{
+        else{ // VERS LA GAUCHE
           if(obj.previousPointerAngle > pointerAngle){ //bon sens
             if(diffAngle>180){ //gère la rotation et les tricheurs xD
               //gauche tourne mauvais sens passage de 360 a 0
@@ -287,6 +292,8 @@ function checkSpiral(obj){
       //pointer actuel devient l'ancien
       obj.previousPointerAngle = pointerAngle;
       if(obj.spiralScore<0) obj.spiralScore = 0;
+      // on emmet les particules
+      particleEmit(obj);
     }
     //on verifie s'il a fini la spiral
     if(obj.spiralScore>=obj.spiralScoreMax){
@@ -311,7 +318,7 @@ function checkSpiral(obj){
   }
   //on change le scale en fonction de son score
   var diff = obj.spiralScaleMax - obj.spiralScaleMin;
-  var newScale = obj.spiralScaleMin+(obj.spiralScaleMax - obj.spiralScaleMin)*(obj.spiralScore / obj.spiralScoreMax);
+  var newScale = obj.spiralScaleMin + diff * (obj.spiralScore / obj.spiralScoreMax); 
   obj.Object.scale.setTo(newScale);
 
   return obj;
@@ -410,26 +417,26 @@ function generatePracticeElement(type){
   };
 
   if(type == TypeObject.BUTTON){//BOUTON
-      pos.button.x = Math.floor(Math.random()*99) + 1;
-      pos.button.y = Math.floor(Math.random()*99) + 1;
+    pos.button.x = Math.floor(Math.random()*99) + 1;
+    pos.button.y = Math.floor(Math.random()*99) + 1;
   }
   else if(type == TypeObject.SLIDER){//SLIDER
     pos.slider.start.x = Math.floor(Math.random()*99) + 1;
-      pos.slider.start.y = Math.floor(Math.random()*99) + 1;
+    pos.slider.start.y = Math.floor(Math.random()*99) + 1;
 
-      var X;
-      var Y; Math.floor(Math.random()*99) + 1;
-      var minDistancePercent = 40;
+    var X;
+    var Y;
+    var minDistancePercent = 40;
 
-      while(getDistance(X=Math.floor(Math.random()*99) + 1, Y=Math.floor(Math.random()*99) + 1, pos.slider.start.x, pos.slider.start.y) < minDistancePercent) continue;
+    while(getDistance(X=Math.floor(Math.random()*99) + 1, Y=Math.floor(Math.random()*99) + 1, pos.slider.start.x, pos.slider.start.y) < minDistancePercent) continue;
 
-      pos.slider.middle.x=X;
+    pos.slider.middle.x=X;
     pos.slider.middle.y=Y;
 
     X=0;
     Y=0;
     while(getDistance(X=Math.floor(Math.random()*99) + 1, Y=Math.floor(Math.random()*99) + 1, pos.slider.middle.x, pos.slider.middle.y) < minDistancePercent) continue;
-      pos.slider.end.x=X;
+    pos.slider.end.x=X;
     pos.slider.end.y=Y;
   }
 
@@ -511,16 +518,65 @@ function retourMenu(time){
 
 
 // --------------- emitter -----------------
+function createEmitters(){
+  emitterButton = game.add.emitter(0,0,500);
+  emitterButton.makeParticles('particleButton');
+  emitterButton.gravity = 0;
+  emitterButton.minParticleSpeed = new Phaser.Point(-250, -250);
+  emitterButton.maxParticleSpeed = new Phaser.Point(250, 250);
+  emitterButton.setAlpha(0.3, 0.8);
+  emitterButton.setScale(0.4, 0.8);
+
+  emitterSlider = game.add.emitter(0,0,500);
+  emitterSlider.makeParticles('particleSlider');
+  emitterSlider.gravity = 0;
+  emitterSlider.minParticleSpeed = new Phaser.Point(-250, -250);
+  emitterSlider.maxParticleSpeed = new Phaser.Point(250, 250);
+  emitterSlider.setAlpha(0.3, 0.8);
+  emitterSlider.setScale(0.4, 0.8);
+
+  emitterSpiral = game.add.emitter(0,0,500);
+  emitterSpiral.makeParticles('particleSpiral');
+  emitterSpiral.gravity = 0;
+  emitterSpiral.setAlpha(0.3, 0.8);
+  emitterSpiral.setScale(0.4, 0.8);
+
+  emitterFinish = game.add.emitter(0,0,500);
+  emitterFinish.makeParticles(['particleButton','particleSlider','particleSpiral']);
+  emitterFinish.gravity = 0;
+  emitterFinish.minParticleSpeed = new Phaser.Point(-250, -250);
+  emitterFinish.maxParticleSpeed = new Phaser.Point(250, 250);
+  emitterFinish.setAlpha(0.3, 0.8);
+  emitterFinish.setScale(0.4, 0.8);
+}
+
 function particleEmit(obj) {
   if(obj.Type == TypeObject.BUTTON){
     emitterButton.x = obj.Object.x;
     emitterButton.y = obj.Object.y;
-    emitterButton.start(true, 1000,null,20);
+    emitterButton.start(true, 800,null,20);
   }
   else if(obj.Type == TypeObject.SLIDER){
     emitterSlider.x = obj.Object.x;
     emitterSlider.y = obj.Object.y;
-    emitterSlider.start(true, 1000,null,20);
+    emitterSlider.start(true, 800,null,20);
   }
-    
+  else if(obj.Type == TypeObject.SPIRAL)
+    emitterSpiral.start(true, 400,null,2);
+}
+
+function updateEmitterSpiral(obj, angle){
+  emitterSpiral.x = obj.Object.x + (obj.Object.scale.x * obj.defaultRadius) * (-Math.cos(angle * Math.PI/180)) * 0.9; // x0.9 pour pas etre au bord mais un peu dans le sprite
+  emitterSpiral.y = obj.Object.y + (obj.Object.scale.y * obj.defaultRadius) * (-Math.sin(angle * Math.PI/180)) * 0.9; // x0.9 pour pas etre au bord mais un peu dans le sprite
+  var particuleSpeed = 500;
+  var diffX = (emitterSpiral.x - obj.Object.x ) / (obj.Object.scale.x * obj.defaultRadius);
+  var diffY = (emitterSpiral.y - obj.Object.y ) / (obj.Object.scale.y * obj.defaultRadius);
+  emitterSpiral.minParticleSpeed = new Phaser.Point(diffX * particuleSpeed - 100, diffY * particuleSpeed - 100);
+  emitterSpiral.maxParticleSpeed = new Phaser.Point(diffX * particuleSpeed + 100, diffY * particuleSpeed + 100);
+}
+
+function emitEndParticle(){
+  emitterFinish.x = ((Math.floor(Math.random()*99) + 1) / 100) * window.innerWidth;
+  emitterFinish.y = ((Math.floor(Math.random()*99) + 1) / 100) * actualHeight;
+  emitterFinish.start(true, 800,null,5);
 }
