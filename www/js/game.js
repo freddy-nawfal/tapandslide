@@ -95,6 +95,7 @@ function update() {
           var text = game.add.text(window.innerWidth/2,actualHeight/2,"WINNER", style);
           text.anchor.setTo(0.5,0.5);
           text.fontSize = 50;
+          emitEndParticle();
         }
         else{
           var text = game.add.text(window.innerWidth/2,actualHeight/2,"LOSER", style);
@@ -106,8 +107,8 @@ function update() {
         var text = game.add.text(window.innerWidth/2,actualHeight/2,"FINISH", style);
         text.anchor.setTo(0.5,0.5);
         text.fontSize = 50;
+        emitEndParticle();
       }
-      emitEndParticle();
       emitterFinish.forEachAlive(function(p){   p.alpha= p.lifespan / emitterFinish.lifespan; });
     }
     // ici parti pas encore fini, pour les trucs autre
